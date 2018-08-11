@@ -1,5 +1,5 @@
 {
-  "epochs": 50,
+  "epochs": 20,
   "batch_size": 64,
   "model": "models.mocap_conv",
   "emotion": ["ang", "exc", "neu", "sad"]
