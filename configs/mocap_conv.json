@@ -1,0 +1,6 @@
+{
+  "epochs": 50,
+  "batch_size": 64,
+  "model": "models.mocap_conv",
+  "emotion": ["ang", "exc", "neu", "sad"]
+}

@@ -1,0 +1,6 @@
+{
+  "epochs": 20,
+  "batch_size": 64,
+  "model": "models.speech_dense",
+  "emotion": ["ang", "exc", "neu", "sad"]
+}
