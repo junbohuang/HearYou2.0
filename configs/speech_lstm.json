@@ -1,6 +1,8 @@
 {
   "epochs": 20,
   "batch_size": 64,
+  "train_val_test_split": [0.7, 0.15, 0.15],
+  "split_seed": 42,
   "model": "models.speech_lstm",
   "emotion": ["ang", "exc", "neu", "sad"]
 }

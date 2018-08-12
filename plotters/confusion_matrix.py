@@ -16,11 +16,6 @@ def plot_confusion_matrix(cm, classes,
     """
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-        print("Normalized confusion matrix")
-    else:
-        print('Confusion matrix, without normalization')
-
-    print(cm)
 
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title)
@@ -36,35 +31,33 @@ def plot_confusion_matrix(cm, classes,
                  horizontalalignment="center",
                  color="white" if cm[i, j] > thresh else "black")
 
-    plt.tight_layout()
+    plt.tight_layout(h_pad=1.08)
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
 
 
-def plot_cm(config, validation_data, prediction):
-    model_name = config['model'].split('.')[-1]
-    emotions_used = np.array(config['emotion'])
+def plot_cm(model_name, emotions_used, Y, prediction):
 
     y_pred = prediction.argmax(1)
-    y_true = validation_data[-1].argmax(1)
+    y_true = Y.argmax(1)
+
     # confusion matrix
     cnf_matrix = confusion_matrix(y_true, y_pred, labels=[0, 1, 2, 3])
     np.set_printoptions(precision=2)
 
     # Plot non-normalized confusion matrix
     path_to_cm = './plots/' + model_name
-    print(path_to_cm)
     if not os.path.exists(path_to_cm):
         os.mkdir(path_to_cm)
     plt.figure()
     plot_confusion_matrix(cnf_matrix, classes=emotions_used,
-                          title='Confusion matrix, without normalization')
+                          title='Confusion Matrix')
     plt.savefig(path_to_cm + "/confusion_matrix_non_normalized.png")
 
     # Plot normalized confusion matrix
     plt.figure()
     plot_confusion_matrix(cnf_matrix, classes=emotions_used, normalize=True,
-                          title='Normalized confusion matrix')
+                          title='Normalized Confusion Matrix')
 
     plt.savefig(path_to_cm + "/confusion_matrix_normalized.png")
     plt.close()

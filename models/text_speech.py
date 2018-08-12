@@ -12,14 +12,18 @@ def load(nb_words, g_word_embedding_matrix):
                                    input_length=500,
                                    trainable=True)(text_layer)
     text_layer = keras.layers.LSTM(256, return_sequences=True, recurrent_dropout=0.2)(text_layer)
+    text_layer = keras.layers.Dropout(0.2)(text_layer)
     text_layer = keras.layers.LSTM(256, return_sequences=False, recurrent_dropout=0.2)(text_layer)
-    text_layer = keras.layers.Dense(256)(text_layer)
+    text_layer = keras.layers.Dropout(0.2)(text_layer)
+    text_layer = keras.layers.Dense(256, activation='relu')(text_layer)
 
     speech_input_layer = keras.layers.Input(shape=(100, 34))
     speech_layer = speech_input_layer
 
     speech_layer = keras.layers.LSTM(256, return_sequences=True, recurrent_dropout=0.2)(speech_layer)
+    speech_layer = keras.layers.Dropout(0.2)(speech_layer)
     speech_layer = keras.layers.LSTM(256, return_sequences=False, recurrent_dropout=0.2)(speech_layer)
+    speech_layer = keras.layers.Dropout(0.2)(speech_layer)
     speech_layer = keras.layers.Dense(256, activation='relu')(speech_layer)
 
     combined_layer = keras.layers.concatenate([text_layer, speech_layer])

@@ -13,8 +13,10 @@ def load(nb_words, g_word_embedding_matrix):
                                     input_length=500,
                                     trainable=True)(layer)
     layer = keras.layers.LSTM(256, return_sequences=True, recurrent_dropout=0.2)(layer)
+    layer = keras.layers.Dropout(0.2)(layer)
     layer = keras.layers.LSTM(256, return_sequences=False, recurrent_dropout=0.2)(layer)
-    layer = keras.layers.Dense(256)(layer)
+    layer = keras.layers.Dropout(0.2)(layer)
+    layer = keras.layers.Dense(256, activation='relu')(layer)
 
     output_layer = keras.layers.Dense(4, activation='softmax')(layer)
 

@@ -13,16 +13,11 @@ def main():
     if args.configpath:
         with open(args.configpath) as json_data_file:
             config = json.load(json_data_file)
-        module_model = config['model']
-        epochs = config['epochs']
-        batch_size = config['batch_size']
-        model_name = config['model'].split('.')[-1]
 
-        model, xtrain, ytrain, validation_data = load_model(module_model, config)
+        model, xtrain, ytrain, xtest, ytest = load_model(config)
         model.summary()
-        train(model_name, model, xtrain, ytrain, validation_data, batch_size, epochs)
-        prediction = predict(model, validation_data)
-        plot_cm(config, validation_data, prediction)
+        train(config, model, xtrain, ytrain)
+        evaluate(config, model, xtest, ytest)
         K.clear_session()
 
     else:
@@ -34,16 +29,11 @@ def main():
                 configpath = "./configs/" + cfg
                 with open(configpath) as json_data_file:
                     config = json.load(json_data_file)
-                module_model = config['model']
-                epochs = config['epochs']
-                batch_size = config['batch_size']
-                model_name = config['model'].split('.')[-1]
 
-                model, xtrain, ytrain, validation_data = load_model(module_model, config)
+                model, xtrain, ytrain, xtest, ytest = load_model(config)
                 model.summary()
-                train(model_name, model, xtrain, ytrain, validation_data, batch_size, epochs)
-                prediction = predict(model, validation_data)
-                plot_cm(config, validation_data, prediction)
+                train(config, model, xtrain, ytrain)
+                evaluate(config, model, xtest, ytest)
                 K.clear_session()
 
 

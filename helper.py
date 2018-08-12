@@ -1,22 +1,26 @@
-import os
 import wave
 import numpy as np
 import importlib
 import pickle
-import itertools
 
-
+import cv2
+# import cv
+import tensorflow as tf
 from tensorflow.python.keras.callbacks import TensorBoard, ModelCheckpoint, CSVLogger
+from tensorflow.python import debug as tf_debug
 
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing import sequence
 
-
 from sklearn.preprocessing import label_binarize
 from sklearn.utils import class_weight
+from sklearn.model_selection import train_test_split
 
 from features import *
-from callbacks.metrics_logger import MetricsLogger
+from plotters.confusion_matrix import *
+from callbacks.ConfusionMatrixLogger import ConfusionMatrixPlotter
+from callbacks.AccuracyLossLogger import AccLossPlotter
+
 
 def split_wav(wav, emotions):
     (nchannels, sampwidth, framerate, nframes, comptype, compname), samples = wav
@@ -149,16 +153,30 @@ def get_emotions(path_to_emotions, filename):
 
 
 
-def train(model_name, model, xtrain, ytrain, validation_data, batch_size, epochs):
-    path_to_ckp = './logs/' + model_name
-    if not os.path.exists(path_to_ckp):
-        os.makedirs(path_to_ckp)
-    # tensorboard = TensorBoard(log_dir=path_to_ckp, histogram_freq=1, write_graph=True, write_images=True,
-    #                           write_grads=True)
-    csv_name = path_to_ckp + '/' + model_name + '.log'
+def train(config, model, xtrain, ytrain):
+
+    epochs = config['epochs']
+    batch_size = config['batch_size']
+    model_name = config['model'].split('.')[-1]
+    emotion_class = config['emotion']
+    validation_split = np.array(config['train_val_test_split'])[1] / \
+                       (np.array(config['train_val_test_split'])[1] +
+                        np.array(config['train_val_test_split'])[0])
+
+
+    path_to_log = './logs/' + model_name
+    if not os.path.exists(path_to_log):
+        os.makedirs(path_to_log)
+
+    # tensorboard = TensorBoard(log_dir=path_to_log, histogram_freq=1, write_graph=False, write_grads=False)
+
+    csv_name = path_to_log + '/' + model_name + '.log'
     csv_logger = CSVLogger(csv_name)
-    # save_path = path_to_ckp + '/weights.{epoch:02d}-{val_loss:.2f}.hdf5'
-    # check_pointer = ModelCheckpoint(save_path, save_best_only=True)
+
+    cm_logger = ConfusionMatrixPlotter(xtrain, ytrain, emotion_class, model_name)
+
+    accloss_logger = AccLossPlotter(model_name)
+
     class_weights = class_weight.compute_class_weight('balanced',
                                                       np.unique(ytrain.argmax(1)),
                                                       ytrain.argmax(1))
@@ -166,17 +184,42 @@ def train(model_name, model, xtrain, ytrain, validation_data, batch_size, epochs
     for n in range(len(class_weights)):
         class_weights_dict[n] = class_weights[n]
 
-    return model.fit(xtrain, ytrain,
-                     batch_size=batch_size, epochs=epochs, verbose=1,
-                     validation_data=validation_data,
-                     callbacks=[csv_logger],
-                     class_weight=class_weights_dict)
+    ## FOR SAVING MODEL
+    # save_path = path_to_ckp + '/weights.{epoch:02d}-{val_loss:.2f}.hdf5'
+    # check_pointer = ModelCheckpoint(save_path, save_best_only=True)
 
+    ## FOR DEBUG
+    # K.set_session(
+    #     tf_debug.TensorBoardDebugWrapperSession(
+    #         tf.Session(), "127.0.0.1:8080"))
+    # K.get_session().run(tf.global_variables_initializer())
 
-def predict(model, validation_data):
-    predictions = model.predict(validation_data[0], verbose=1)
-    return predictions
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
 
+        model.fit(xtrain, ytrain,
+                  batch_size=batch_size, epochs=epochs, verbose=1,
+                  validation_split=validation_split, shuffle=True,
+                  callbacks=[csv_logger, accloss_logger, cm_logger],
+                  class_weight=class_weights_dict)
+
+def evaluate(config, model, xtest, ytest):
+    model_name = config['model'].split('.')[-1]
+    emotion_class = config['emotion']
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+        print("evaluating...")
+        scores = model.evaluate(x=xtest, y=ytest, verbose=0)
+        for n in range(len(scores)):
+            if n == 0:
+                print("%s: %.3f" % (model.metrics_names[n], scores[n]))
+            else:
+                print("%s: %.2f%%" % (model.metrics_names[n], scores[n] * 100))
+
+        print("predicting...")
+        prediction = model.predict(xtest, verbose=0)
+    plot_cm(model_name, emotion_class, ytest, prediction)
+    print("confusion matrix saved!")
 
 def dir_setup():
     if not os.path.exists('./plots'):
@@ -186,6 +229,22 @@ def dir_setup():
     if not os.path.exists('./datasets'):
         os.mkdir('./datasets')
 
+
+# def make_movie(images, path, width, height):
+#
+#     video_name = os.path.join(path, 'evolutionary_confusion_matrix.mp4')
+#
+#     video = cv2.VideoWriter(filename=video_name,
+#                             fourcc=-1,
+#                             fps=3,
+#                             frameSize=(width,height),
+#                             isColor=True)
+#
+#     for image in images:
+#         video.write(cv2.imread(os.path.join(path, image)))
+#
+#     video.release()
+#     cv2.destroyAllWindows()
 
 def get_transcription(data2):
     code_path = os.path.dirname(os.path.realpath(os.getcwd()))
@@ -304,7 +363,10 @@ def get_label(data2, emotions_used):
 def feed_data(config):
     model_name = config['model'].split('.')[-1]
     emotions_used = np.array(config['emotion'])
+    train_val_test_split = np.array(config['train_val_test_split'])
+    split_seed = config['split_seed']
     code_path = os.path.dirname(os.path.realpath(os.getcwd()))
+    test_size = train_val_test_split[-1]
 
     with open(code_path + '/HearYou2.0/datasets/data_collected.pickle', 'rb') as handle:
         data2 = pickle.load(handle)
@@ -315,127 +377,133 @@ def feed_data(config):
         x_train_mocap = get_mocap(data2)
         Y = get_label(data2, emotions_used)
 
-        xtrain_sp = x_train_speech[:3838]
-        xtest_sp = x_train_speech[3838:]
-        xtrain_tx = x_train_text[:3838]
-        xtest_tx = x_train_text[3838:]
-        ytrain_sp = Y[:3838]
-        ytest_sp = Y[3838:]
-        xtrain_mo = x_train_mocap[:3838]
-        xtest_mo = x_train_mocap[3838:]
+        xtrain_sp, xtest_sp, ytrain, ytest= train_test_split(x_train_speech, Y,
+                                                                   test_size=test_size,
+                                                                   random_state=split_seed,
+                                                                   shuffle=True)
 
-        ytrain = ytrain_sp
+        xtrain_tx, xtest_tx, _, _ = train_test_split(x_train_text, Y,
+                                                            test_size=test_size,
+                                                            random_state=split_seed,
+                                                            shuffle=True)
+
+        xtrain_mo, xtest_mo, _, _ = train_test_split(x_train_mocap, Y,
+                                                     test_size=test_size,
+                                                     random_state=split_seed,
+                                                     shuffle=True)
+
         xtrain = [xtrain_tx, xtrain_sp, xtrain_mo]
+        xtest = [xtest_tx, xtest_sp, xtest_mo]
 
-        validation_data = ([xtest_tx, xtest_sp, xtest_mo], ytest_sp)
-        return xtrain, ytrain, validation_data, nb_words, g_word_embedding_matrix
+        return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
     if model_name == 'text_speech':
         nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2)
         x_train_speech = get_speech_features(data2)
         Y = get_label(data2, emotions_used)
 
-        xtrain_sp = x_train_speech[:3838]
-        xtest_sp = x_train_speech[3838:]
-        xtrain_tx = x_train_text[:3838]
-        xtest_tx = x_train_text[3838:]
-        ytrain_sp = Y[:3838]
-        ytest_sp = Y[3838:]
+        xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(x_train_speech, Y,
+                                                               test_size=test_size,
+                                                               random_state=split_seed,
+                                                               shuffle=True)
 
-        ytrain = ytrain_sp
+        xtrain_tx, xtest_tx, _, _ = train_test_split(x_train_text, Y,
+                                                     test_size=test_size,
+                                                     random_state=split_seed,
+                                                     shuffle=True)
+
         xtrain = [xtrain_tx, xtrain_sp]
+        xtest = [xtest_tx, xtest_sp]
 
-        validation_data = ([xtest_tx, xtest_sp], ytest_sp)
-        return xtrain, ytrain, validation_data, nb_words, g_word_embedding_matrix
+        return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
     if model_name == 'text_lstm':
         nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2)
         Y = get_label(data2, emotions_used)
 
-        xtrain_tx = x_train_text[:3838]
-        xtest_tx = x_train_text[3838:]
-        ytrain_sp = Y[:3838]
-        ytest_sp = Y[3838:]
+        xtrain_tx, xtest_tx, ytrain, ytest = train_test_split(x_train_text, Y,
+                                                     test_size=test_size,
+                                                     random_state=split_seed,
+                                                     shuffle=True)
 
-        ytrain = ytrain_sp
         xtrain = xtrain_tx
+        xtest = xtest_tx
 
-        validation_data = (xtest_tx, ytest_sp)
-        return xtrain, ytrain, validation_data, nb_words, g_word_embedding_matrix
+        return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
     if model_name == 'speech_dense' or model_name == 'speech_lstm':
         x_train_speech = get_speech_features(data2)
         Y = get_label(data2, emotions_used)
 
-        xtrain_sp = x_train_speech[:3838]
-        xtest_sp = x_train_speech[3838:]
-        ytrain_sp = Y[:3838]
-        ytest_sp = Y[3838:]
+        xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(x_train_speech, Y,
+                                                               test_size=test_size,
+                                                               random_state=split_seed,
+                                                               shuffle=True)
 
-        ytrain = ytrain_sp
         xtrain = xtrain_sp
+        xtest = xtest_sp
 
-        validation_data = (xtest_sp, ytest_sp)
-        return xtrain, ytrain, validation_data
+        return xtrain, ytrain, xtest, ytest
 
     if model_name == 'speech_mocap':
         x_train_speech = get_speech_features(data2)
         x_train_mocap = get_mocap(data2)
         Y = get_label(data2, emotions_used)
 
-        xtrain_sp = x_train_speech[:3838]
-        xtest_sp = x_train_speech[3838:]
-        ytrain_sp = Y[:3838]
-        ytest_sp = Y[3838:]
-        xtrain_mo = x_train_mocap[:3838]
-        xtest_mo = x_train_mocap[3838:]
+        xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(x_train_speech, Y,
+                                                               test_size=test_size,
+                                                               random_state=split_seed,
+                                                               shuffle=True)
+        xtrain_mo, xtest_mo, _, _ = train_test_split(x_train_mocap, Y,
+                                                     test_size=test_size,
+                                                     random_state=split_seed,
+                                                     shuffle=True)
 
-        ytrain = ytrain_sp
         xtrain = [xtrain_sp, xtrain_mo]
+        xtest = [xtest_sp, xtest_mo]
 
-        validation_data = ([xtest_sp, xtest_mo], ytest_sp)
-        return xtrain, ytrain, validation_data
+        return xtrain, ytrain, xtest, ytest
 
     if model_name == 'mocap_conv':
         x_train_mocap = get_mocap(data2)
         Y = get_label(data2, emotions_used)
 
-        ytrain_sp = Y[:3838]
-        ytest_sp = Y[3838:]
-        xtrain_mo = x_train_mocap[:3838]
-        xtest_mo = x_train_mocap[3838:]
+        xtrain_mo, xtest_mo, ytrain, ytest = train_test_split(x_train_mocap, Y,
+                                                     test_size=test_size,
+                                                     random_state=split_seed,
+                                                     shuffle=True)
 
-        ytrain = ytrain_sp
         xtrain = xtrain_mo
+        xtest = xtest_mo
 
-        validation_data = (xtest_mo, ytest_sp)
-        return xtrain, ytrain, validation_data
+        return xtrain, ytrain, xtest, ytest
 
     if model_name == 'mocap_lstm':
         x_train_mocap = get_mocap(data2)
         Y = get_label(data2, emotions_used)
 
-        x_train_mocap2 = x_train_mocap.reshape(-1, 200, 189)
-        xtrain_mo2 = x_train_mocap2[:3838]
-        xtest_mo2 = x_train_mocap2[3838:]
-        ytrain_sp = Y[:3838]
-        ytest_sp = Y[3838:]
+        x_train_mocap = x_train_mocap.reshape(-1, 200, 189)
+        xtrain_mo, xtest_mo, ytrain, ytest = train_test_split(x_train_mocap, Y,
+                                                               test_size=test_size,
+                                                               random_state=split_seed,
+                                                               shuffle=True)
 
-        ytrain = ytrain_sp
-        xtrain = xtrain_mo2
-        validation_data = (xtest_mo2, ytest_sp)
-        return xtrain, ytrain, validation_data
+        xtrain = xtrain_mo
+        xtest = xtest_mo
+
+        return xtrain, ytrain, xtest, ytest
 
 
-def load_model(module_model, config):
+def load_model(config):
+    module_model = config['model']
     module = importlib.import_module(module_model)
     if 'text' in module_model:
-        xtrain, ytrain, validation_data, nb_words, g_word_embedding_matrix = feed_data(config)
+        xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix = feed_data(config)
         model = module.load(nb_words, g_word_embedding_matrix)
     else:
-        xtrain, ytrain, validation_data = feed_data(config)
+        xtrain, ytrain, xtest, ytest = feed_data(config)
         model = module.load()
-    return model, xtrain, ytrain, validation_data
+    return model, xtrain, ytrain, xtest, ytest
 
 
 def calculate_features(frames, freq, options):
