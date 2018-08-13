@@ -153,7 +153,7 @@ def get_emotions(path_to_emotions, filename):
 
 
 
-def train(config, model, xtrain, ytrain):
+def train(config, model, xtrain, ytrain, xtest, ytest):
 
     epochs = config['epochs']
     batch_size = config['batch_size']
@@ -168,12 +168,8 @@ def train(config, model, xtrain, ytrain):
     if not os.path.exists(path_to_log):
         os.makedirs(path_to_log)
 
-    # tensorboard = TensorBoard(log_dir=path_to_log, histogram_freq=1, write_graph=False, write_grads=False)
-
     csv_name = path_to_log + '/' + model_name + '.log'
     csv_logger = CSVLogger(csv_name)
-
-    cm_logger = ConfusionMatrixPlotter(xtrain, ytrain, emotion_class, model_name)
 
     accloss_logger = AccLossPlotter(model_name)
 
@@ -184,8 +180,11 @@ def train(config, model, xtrain, ytrain):
     for n in range(len(class_weights)):
         class_weights_dict[n] = class_weights[n]
 
+    # tensorboard = TensorBoard(log_dir=path_to_log, histogram_freq=1, write_graph=False, write_grads=False)
+    # cm_logger = ConfusionMatrixPlotter(xtrain, ytrain, emotion_class, model_name)
+
     ## FOR SAVING MODEL
-    # save_path = path_to_ckp + '/weights.{epoch:02d}-{val_loss:.2f}.hdf5'
+    save_path = os.path.join(path_to_log, model_name) + '.h5'
     # check_pointer = ModelCheckpoint(save_path, save_best_only=True)
 
     ## FOR DEBUG
@@ -200,14 +199,12 @@ def train(config, model, xtrain, ytrain):
         model.fit(xtrain, ytrain,
                   batch_size=batch_size, epochs=epochs, verbose=1,
                   validation_split=validation_split, shuffle=True,
-                  callbacks=[csv_logger, accloss_logger, cm_logger],
+                  callbacks=[csv_logger, accloss_logger],
                   class_weight=class_weights_dict)
+        print("trained. saving model...")
+        model.save_weights(save_path)
+        print("Saved model to disk")
 
-def evaluate(config, model, xtest, ytest):
-    model_name = config['model'].split('.')[-1]
-    emotion_class = config['emotion']
-    with tf.Session() as sess:
-        sess.run(tf.global_variables_initializer())
         print("evaluating...")
         scores = model.evaluate(x=xtest, y=ytest, verbose=0)
         for n in range(len(scores)):
@@ -218,8 +215,27 @@ def evaluate(config, model, xtest, ytest):
 
         print("predicting...")
         prediction = model.predict(xtest, verbose=0)
-    plot_cm(model_name, emotion_class, ytest, prediction)
-    print("confusion matrix saved!")
+        plot_cm(model_name, emotion_class, ytest, prediction)
+        print("confusion matrix saved!")
+
+# def evaluate(config, model, xtest, ytest):
+#     model_name = config['model'].split('.')[-1]
+#     emotion_class = config['emotion']
+#     with tf.Session() as sess:
+#         sess.run(tf.global_variables_initializer())
+#         model.load_weights(save_path)
+#         print("evaluating...")
+#         scores = model.evaluate(x=xtest, y=ytest, verbose=0)
+#         for n in range(len(scores)):
+#             if n == 0:
+#                 print("%s: %.3f" % (model.metrics_names[n], scores[n]))
+#             else:
+#                 print("%s: %.2f%%" % (model.metrics_names[n], scores[n] * 100))
+#
+#         print("predicting...")
+#         prediction = model.predict(xtest, verbose=0)
+#     plot_cm(model_name, emotion_class, ytest, prediction)
+#     print("confusion matrix saved!")
 
 def dir_setup():
     if not os.path.exists('./plots'):

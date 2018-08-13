@@ -1,26 +1,27 @@
-from tensorflow import keras
+from keras.layers import Input, Conv2D, Dropout, Flatten, concatenate
+from keras.layers import BatchNormalization, Dense, Embedding, LSTM, Bidirectional
+from keras.models import Model
 from metrics.top_k_accuracy import *
-
 
 def load(nb_words, g_word_embedding_matrix):
 
-    input_layer = keras.layers.Input(shape=(500, ))
+    input_layer = Input(shape=(500, ))
     layer = input_layer
 
-    layer = keras.layers.Embedding(nb_words,
+    layer = Embedding(nb_words,
                                     300,
                                     weights=[g_word_embedding_matrix],
                                     input_length=500,
                                     trainable=True)(layer)
-    layer = keras.layers.LSTM(256, return_sequences=True, recurrent_dropout=0.2)(layer)
-    layer = keras.layers.Dropout(0.2)(layer)
-    layer = keras.layers.LSTM(256, return_sequences=False, recurrent_dropout=0.2)(layer)
-    layer = keras.layers.Dropout(0.2)(layer)
-    layer = keras.layers.Dense(256, activation='relu')(layer)
+    layer = Bidirectional(LSTM(256, return_sequences=True, recurrent_dropout=0.2))(layer)
+    layer = Dropout(0.2)(layer)
+    layer = Bidirectional(LSTM(256, return_sequences=False, recurrent_dropout=0.2))(layer)
+    layer = Dropout(0.2)(layer)
+    # layer = Dense(256, activation='relu')(layer)
 
-    output_layer = keras.layers.Dense(4, activation='softmax')(layer)
+    output_layer = Dense(4, activation='softmax')(layer)
 
-    model = keras.models.Model(inputs=input_layer, outputs=output_layer)
+    model = Model(inputs=input_layer, outputs=output_layer)
     metrics = top_k_accuracy()
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=metrics)
     return model
