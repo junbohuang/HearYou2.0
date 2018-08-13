@@ -1,6 +1,8 @@
 from keras.callbacks import Callback
 import matplotlib.pyplot as plt
+plt.switch_backend('agg')
 import matplotlib.patches as mpatches
+
 
 
 

@@ -1,7 +1,7 @@
-# import cv2
 from keras.callbacks import Callback
-# from plotters.confusion_matrix import *
 from helper import *
+import matplotlib.pyplot as plt
+plt.switch_backend('agg')
 
 def make_movie(images, path, width, height):
     # video_name = path + '/evolutionary_confusion_matrix.m4v'

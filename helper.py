@@ -4,7 +4,6 @@ import importlib
 import pickle
 
 import cv2
-# import cv
 import tensorflow as tf
 from tensorflow.python.keras.callbacks import TensorBoard, ModelCheckpoint, CSVLogger
 from tensorflow.python import debug as tf_debug

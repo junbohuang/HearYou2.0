@@ -32,8 +32,8 @@ def main():
 
                 model, xtrain, ytrain, xtest, ytest = load_model(config)
                 model.summary()
-                train(config, model, xtrain, ytrain)
-                evaluate(config, model, xtest, ytest)
+                train(config, model, xtrain, ytrain, xtest, ytest)
+                # evaluate(config, model, xtest, ytest)
                 K.clear_session()
 
 
