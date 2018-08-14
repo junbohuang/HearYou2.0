@@ -2,6 +2,7 @@ worldcitiespop.txt
 plz-5stellig.geojson
 *.xml
 *.ipynb
+*.h5
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
