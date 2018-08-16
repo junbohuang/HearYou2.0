@@ -1,0 +1,48 @@
+#!/bin/bash
+#$ -N att_tx
+#$ -l mem=8G
+#$ -cwd
+#$ -l cuda=1
+#$ -l nv_mem_free=6G
+#$ -j y
+#$ -l h_rt=12:00:00
+#$ -l hostname=!*picture*
+
+echo "*** Start of SGE job ***"
+date
+# Identify Job-ID
+echo ""
+echo "Hostname"
+echo "$HOSTNAME"
+echo $JOB_ID
+echo 'Job-ID:'
+echo $JOB_ID
+echo 'user:'
+echo $USER
+echo ""
+echo "Start"
+echo ""
+
+source /net/home/student/j/jschoening/pimv_setup.bash
+
+export PATH=/home/student/j/jschoening/local/cuda-9.0/bin:$PATH
+export LD_LIBRARY_PATH=/home/student/j/jschoening/local/cuda-9.0/lib64:$LD_LIBRARY_PATH
+export CUDA_HOME=/home/student/j/jschoening/local/cuda-9.0
+
+echo "CUDA VERSION (should be 9):"
+nvcc --version
+
+rm /tmp/* -R -f 2> /dev/null
+
+echo "ROOT"
+echo $PIMV_ROOT
+source activate pimv
+
+
+echo "rolling..."
+PYTHONPATH=$PIMV_ROOT/$USER WALLTIME=12:00:00 python main.py -c configs/text_lstm_attention.json
+
+
+echo ""
+date
+echo "*** End of SGE job ***"
