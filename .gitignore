@@ -4,7 +4,7 @@ plz-5stellig.geojson
 *.ipynb
 *.h5
 *.sge
-
+datasets/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
