@@ -25,7 +25,6 @@ def load():
     layer = Conv2D(128, 3, strides=(2,2), padding='same', activation='relu')(layer)
     layer = BatchNormalization()(layer)
     layer = Dropout(0.2)(layer)
-    layer = Dropout(0.2)(layer)
     layer = Flatten()(layer)
 
     output_layer = Dense(4, activation='softmax')(layer)

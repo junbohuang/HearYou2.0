@@ -386,7 +386,7 @@ def feed_data(config):
     with open(code_path + '/HearYou2.0/datasets/data_collected.pickle', 'rb') as handle:
         data2 = pickle.load(handle)
 
-    if model_name == 'text_speech_mocap':
+    if model_name == 'text_speech_mocap' or model_name == 'text_speech_mocap_attention':
         nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2)
         x_train_speech = get_speech_features(data2)
         x_train_mocap = get_mocap(data2)
@@ -446,7 +446,7 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
-    if model_name == 'speech_dense' or model_name == 'speech_lstm':
+    if model_name == 'speech_dense' or model_name == 'speech_lstm' or model_name == 'speech_lstm_attention':
         x_train_speech = get_speech_features(data2)
         Y = get_label(data2, emotions_used)
 
@@ -493,7 +493,7 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest
 
-    if model_name == 'mocap_lstm':
+    if model_name == 'mocap_lstm' or 'mocap_lstm_attention':
         x_train_mocap = get_mocap(data2)
         Y = get_label(data2, emotions_used)
 
@@ -508,14 +508,18 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest
 
+    else:
+        raise NotImplementedError
 
 def load_model(config):
     module_model = config['model']
+    print("model:", module_model)
     module = importlib.import_module(module_model)
     if 'text' in module_model:
         xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix = feed_data(config)
         model = module.load(nb_words, g_word_embedding_matrix)
     else:
+        print(config)
         xtrain, ytrain, xtest, ytest = feed_data(config)
         model = module.load()
     return model, xtrain, ytrain, xtest, ytest

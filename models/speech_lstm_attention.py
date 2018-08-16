@@ -1,19 +1,22 @@
-from keras.layers import Input, Conv2D, Dropout, Flatten, concatenate, Permute, Reshape
+from keras.layers import Input, Conv2D, Dropout, Flatten, concatenate
 from keras.layers import BatchNormalization, Dense, Embedding, LSTM, Bidirectional
 from keras.models import Model
 from metrics.top_k_accuracy import *
+from models.attention import AttentionDecoder
 
 def load():
 
-    input_layer = Input(shape=(200, 189))
+
+    input_layer = Input(shape=(100, 34))
     layer = input_layer
 
     layer = Bidirectional(LSTM(256, return_sequences=True, recurrent_dropout=0.2))(layer)
     layer = Dropout(0.2)(layer)
-    layer = Bidirectional(LSTM(256, return_sequences=False, recurrent_dropout=0.2))(layer)
+    # layer = Bidirectional(LSTM(256, return_sequences=False, recurrent_dropout=0.2))(layer)
+    layer = AttentionDecoder(256, 256)(layer)
     layer = Dropout(0.2)(layer)
-    layer = Dense(256, activation='relu')(layer)
-
+    # layer = Dense(256, activation='relu')(layer)
+    layer = Flatten()(layer)
     output_layer = Dense(4, activation='softmax')(layer)
 
     model = Model(inputs=input_layer, outputs=output_layer)
