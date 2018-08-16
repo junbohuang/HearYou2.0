@@ -49,8 +49,7 @@ def plot_cm(model_name, emotions_used, Y, prediction):
 
     # Plot non-normalized confusion matrix
     path_to_cm = './plots/' + model_name
-    if not os.path.exists(path_to_cm):
-        os.mkdir(path_to_cm)
+
     plt.figure()
     plot_confusion_matrix(cnf_matrix, classes=emotions_used,
                           title='Confusion Matrix')

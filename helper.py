@@ -162,6 +162,9 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
                        (np.array(config['train_val_test_split'])[1] +
                         np.array(config['train_val_test_split'])[0])
 
+    path_to_plots = './plots/' + model_name
+    if not os.path.exists(path_to_plots):
+        os.makedirs(path_to_plots)
 
     path_to_log = './logs/' + model_name
     if not os.path.exists(path_to_log):
@@ -412,7 +415,7 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
-    if model_name == 'text_speech':
+    if model_name == 'text_speech' or model_name == 'text_speech_attention':
         nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2)
         x_train_speech = get_speech_features(data2)
         Y = get_label(data2, emotions_used)
@@ -432,7 +435,7 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
-    if model_name == 'text_lstm':
+    if model_name == 'text_lstm' or model_name == 'text_attention':
         nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2)
         Y = get_label(data2, emotions_used)
 
@@ -460,7 +463,7 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest
 
-    if model_name == 'speech_mocap':
+    if model_name == 'speech_mocap' or model_name == 'speech_mocap_attention':
         x_train_speech = get_speech_features(data2)
         x_train_mocap = get_mocap(data2)
         Y = get_label(data2, emotions_used)

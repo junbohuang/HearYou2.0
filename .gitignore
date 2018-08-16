@@ -3,6 +3,7 @@ plz-5stellig.geojson
 *.xml
 *.ipynb
 *.h5
+*.sge
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
