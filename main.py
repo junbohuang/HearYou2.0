@@ -15,9 +15,9 @@ def main():
             config = json.load(json_data_file)
 
         model, xtrain, ytrain, xtest, ytest = load_model(config)
+
         model.summary()
         train(config, model, xtrain, ytrain, xtest, ytest)
-        # evaluate(config, model, xtest, ytest)
         K.clear_session()
 
     else:

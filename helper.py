@@ -3,9 +3,8 @@ import numpy as np
 import importlib
 import pickle
 
-import cv2
 import tensorflow as tf
-from tensorflow.python.keras.callbacks import TensorBoard, ModelCheckpoint, CSVLogger
+from tensorflow.python.keras.callbacks import History, TensorBoard, ModelCheckpoint, CSVLogger
 from tensorflow.python import debug as tf_debug
 
 from keras.preprocessing.text import Tokenizer
@@ -162,13 +161,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
                        (np.array(config['train_val_test_split'])[1] +
                         np.array(config['train_val_test_split'])[0])
 
-    path_to_plots = './plots/' + model_name
-    if not os.path.exists(path_to_plots):
-        os.makedirs(path_to_plots)
-
     path_to_log = './logs/' + model_name
-    if not os.path.exists(path_to_log):
-        os.makedirs(path_to_log)
 
     csv_name = path_to_log + '/' + model_name + '.log'
     csv_logger = CSVLogger(csv_name)
@@ -199,10 +192,10 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
         sess.run(tf.global_variables_initializer())
 
         model.fit(xtrain, ytrain,
-                  batch_size=batch_size, epochs=epochs, verbose=1,
-                  validation_split=validation_split, shuffle=True,
-                  callbacks=[csv_logger, accloss_logger],
-                  class_weight=class_weights_dict)
+                    batch_size=batch_size, epochs=epochs, verbose=1,
+                    validation_split=validation_split, shuffle=True,
+                    callbacks=[csv_logger, accloss_logger],
+                    class_weight=class_weights_dict)
         print("trained. saving model...")
         model.save_weights(save_path)
         print("Saved model to disk")
@@ -220,6 +213,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
         plot_cm(model_name, emotion_class, ytest, prediction)
         print("confusion matrix saved!")
 
+    return model
 # def evaluate(config, model, xtest, ytest):
 #     model_name = config['model'].split('.')[-1]
 #     emotion_class = config['emotion']
@@ -515,6 +509,16 @@ def feed_data(config):
         raise NotImplementedError
 
 def load_model(config):
+
+    model_name = config['model'].split('.')[-1]
+    path_to_plots = './plots/' + model_name
+    if not os.path.exists(path_to_plots):
+        os.makedirs(path_to_plots)
+
+    path_to_log = './logs/' + model_name
+    if not os.path.exists(path_to_log):
+        os.makedirs(path_to_log)
+
     module_model = config['model']
     print("model:", module_model)
     module = importlib.import_module(module_model)
@@ -525,6 +529,8 @@ def load_model(config):
         print(config)
         xtrain, ytrain, xtest, ytest = feed_data(config)
         model = module.load()
+
+
     return model, xtrain, ytrain, xtest, ytest
 
 
