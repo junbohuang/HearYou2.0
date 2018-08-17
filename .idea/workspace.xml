@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="167b6649-c8be-4b8d-a6ae-95b39f9de463" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logs/mocap_conv/mocap_conv.h5" afterPath="$PROJECT_DIR$/logs/mocap_conv/mocap_conv.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plots/mocap_conv/Accuracy.png" afterPath="$PROJECT_DIR$/plots/mocap_conv/Accuracy.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plots/mocap_conv/Loss.png" afterPath="$PROJECT_DIR$/plots/mocap_conv/Loss.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plots/mocap_conv/confusion_matrix_non_normalized.png" afterPath="$PROJECT_DIR$/plots/mocap_conv/confusion_matrix_non_normalized.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plots/mocap_conv/confusion_matrix_normalized.png" afterPath="$PROJECT_DIR$/plots/mocap_conv/confusion_matrix_normalized.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helper.py" afterPath="$PROJECT_DIR$/helper.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/text_speech_attention.py" afterPath="$PROJECT_DIR$/models/text_speech_attention.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/text_speech_mocap_attention.py" afterPath="$PROJECT_DIR$/models/text_speech_mocap_attention.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -47,8 +42,8 @@
           <file leaf-file-name="attention.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/wrappers/attention.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="286">
-                  <caret line="201" column="39" lean-forward="false" selection-start-line="201" selection-start-column="35" selection-end-line="201" selection-end-column="39" />
+                <state relative-caret-position="494">
+                  <caret line="57" column="40" lean-forward="false" selection-start-line="57" selection-start-column="17" selection-end-line="57" selection-end-column="40" />
                   <folding>
                     <element signature="e#0#23#0" expanded="true" />
                   </folding>
@@ -84,11 +79,41 @@
               </provider>
             </entry>
           </file>
+          <file leaf-file-name="speech_mocap_attention.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/models/speech_mocap_attention.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="225">
+                  <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="speech_lstm_attention.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/models/speech_lstm_attention.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="195">
+                  <caret line="17" column="26" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="mocap_lstm_attention.py" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/models/mocap_lstm_attention.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="150">
+                  <caret line="14" column="31" lean-forward="false" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file leaf-file-name="text_speech_attention.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/models/text_speech_attention.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="420">
-                  <caret line="28" column="64" lean-forward="false" selection-start-line="28" selection-start-column="64" selection-end-line="28" selection-end-column="64" />
+                <state relative-caret-position="285">
+                  <caret line="19" column="70" lean-forward="false" selection-start-line="19" selection-start-column="70" selection-end-line="19" selection-end-column="70" />
                   <folding>
                     <element signature="e#0#69#0" expanded="true" />
                   </folding>
@@ -96,11 +121,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="text_speech_mocap_attention.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="text_speech_mocap_attention.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/models/text_speech_mocap_attention.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="385">
-                  <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+                <state relative-caret-position="316">
+                  <caret line="31" column="71" lean-forward="false" selection-start-line="31" selection-start-column="71" selection-end-line="31" selection-end-column="71" />
                   <folding>
                     <element signature="e#0#69#0" expanded="true" />
                   </folding>
@@ -200,15 +225,15 @@
         <option value="$PROJECT_DIR$/configs/speech_mocap_attention.json" />
         <option value="$PROJECT_DIR$/configs/text_lstm_attention.json" />
         <option value="$PROJECT_DIR$/configs/text_speech_attention.json" />
-        <option value="$PROJECT_DIR$/models/text_speech_mocap_attention.py" />
         <option value="$PROJECT_DIR$/models/mocap_lstm_attention.py" />
         <option value="$PROJECT_DIR$/models/text_lstm_attention.py" />
         <option value="$PROJECT_DIR$/models/speech_mocap.py" />
         <option value="$PROJECT_DIR$/models/speech_mocap_attention.py" />
-        <option value="$PROJECT_DIR$/models/text_speech_attention.py" />
         <option value="$PROJECT_DIR$/helper.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/configs/mocap_conv.json" />
+        <option value="$PROJECT_DIR$/models/text_speech_mocap_attention.py" />
+        <option value="$PROJECT_DIR$/models/text_speech_attention.py" />
       </list>
     </option>
   </component>
@@ -798,66 +823,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/speech_mocap_attention.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#69#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/text_lstm_attention.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#69#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/text_speech_attention.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" column="64" lean-forward="false" selection-start-line="28" selection-start-column="64" selection-end-line="28" selection-end-column="64" />
-          <folding>
-            <element signature="e#0#69#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/text_speech_mocap_attention.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="34" column="0" lean-forward="false" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#69#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/speech_lstm_attention.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="26" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#69#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/mocap_lstm_attention.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="31" lean-forward="false" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#87#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plotters/confusion_matrix.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="616">
@@ -916,11 +881,65 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/wrappers/attention.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="201" column="39" lean-forward="false" selection-start-line="201" selection-start-column="35" selection-end-line="201" selection-end-column="39" />
+        <state relative-caret-position="494">
+          <caret line="57" column="40" lean-forward="false" selection-start-line="57" selection-start-column="17" selection-end-line="57" selection-end-column="40" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/text_speech_mocap_attention.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="31" column="71" lean-forward="false" selection-start-line="31" selection-start-column="71" selection-end-line="31" selection-end-column="71" />
+          <folding>
+            <element signature="e#0#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/text_speech_attention.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" column="70" lean-forward="false" selection-start-line="19" selection-start-column="70" selection-end-line="19" selection-end-column="70" />
+          <folding>
+            <element signature="e#0#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/text_lstm_attention.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="21" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#69#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/speech_mocap_attention.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/speech_lstm_attention.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="17" column="26" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/mocap_lstm_attention.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="14" column="31" lean-forward="false" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
+          <folding />
         </state>
       </provider>
     </entry>
