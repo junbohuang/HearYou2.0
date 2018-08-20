@@ -12,7 +12,7 @@ def load():
 
     layer = Bidirectional(LSTM(256, return_sequences=True, recurrent_dropout=0.2))(layer)
     layer = Dropout(0.2)(layer)
-    layer = Bidirectional(LSTM(256, return_sequences=True, recurrent_dropout=0.2))(layer)
+    layer = LSTM(256, return_sequences=True, recurrent_dropout=0.2)(layer)
     layer = Dropout(0.2)(layer)
     layer = AttentionDecoder(256, 256)(layer)
     layer = Flatten()(layer)

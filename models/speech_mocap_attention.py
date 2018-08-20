@@ -12,7 +12,7 @@ def load():
 
     speech_layer = Bidirectional(LSTM(256, return_sequences=True, recurrent_dropout=0.2))(speech_layer)
     speech_layer = Dropout(0.2)(speech_layer)
-    speech_layer = Bidirectional(LSTM(256, return_sequences=True, recurrent_dropout=0.2))(speech_layer)
+    speech_layer = LSTM(256, return_sequences=True, recurrent_dropout=0.2)(speech_layer)
     speech_layer = Dropout(0.2)(speech_layer)
     speech_layer = AttentionDecoder(256, 256)(speech_layer)
     speech_layer = Flatten()(speech_layer)
