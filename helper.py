@@ -384,6 +384,7 @@ def feed_data(config):
         data2 = pickle.load(handle)
 
     if model_name == 'text_speech_mocap' or model_name == 'text_speech_mocap_attention':
+        print(model_name)
         nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2)
         x_train_speech = get_speech_features(data2)
         x_train_mocap = get_mocap(data2)
@@ -429,7 +430,7 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
-    if model_name == 'text_lstm' or model_name == 'text_attention':
+    if model_name == 'text_lstm' or model_name == 'text_lstm_attention':
         nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2)
         Y = get_label(data2, emotions_used)
 
