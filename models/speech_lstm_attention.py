@@ -16,7 +16,7 @@ def load():
     layer = Dropout(0.2)(layer)
     layer = AttentionDecoder(256, 256)(layer)
     layer = Flatten()(layer)
-    layer = Dense(256, activation='relu')(layer)
+    #layer = Dense(256, activation='relu')(layer)
     output_layer = Dense(4, activation='softmax')(layer)
 
     model = Model(inputs=input_layer, outputs=output_layer)

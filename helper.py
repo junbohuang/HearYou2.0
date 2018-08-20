@@ -429,7 +429,7 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
-    if model_name == 'text_lstm' or model_name == 'text_attention':
+    if model_name == 'text_lstm' or model_name == 'text_lstm_attention':
         nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2)
         Y = get_label(data2, emotions_used)
 

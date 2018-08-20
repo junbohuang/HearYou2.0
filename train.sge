@@ -1,10 +1,11 @@
 #!/bin/bash
 #$ -N att_tx
-#$ -l mem=8G
+#$ -l mem=32G
 #$ -cwd
 #$ -l cuda=1
-#$ -l nv_mem_free=6G
+#$ -l nv_mem_free=10G
 #$ -j y
+#$ -pe default 6
 #$ -l h_rt=12:00:00
 #$ -l hostname=!*picture*
 
