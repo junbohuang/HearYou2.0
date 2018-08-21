@@ -387,7 +387,7 @@ def get_mocap(data2, data_type="improvised"):
                 x_mocap = np.concatenate((x_mocap, x_rot), axis=1)
                 x_train_mocap.append(x_mocap)
         elif data_type == "improvised":
-            if detect_acting_type(ses_mod) == "scripted":
+            if detect_acting_type(ses_mod) == "improvised":
                 x_head = ses_mod['mocap_head']
                 if (x_head.shape != (200, 18)):
                     x_head = np.zeros((200, 18))
@@ -405,7 +405,6 @@ def get_mocap(data2, data_type="improvised"):
                 x_train_mocap.append(x_mocap)
 
     x_train_mocap = np.array(x_train_mocap)
-    print("x_train_mocap.shape", x_train_mocap.shape)
     x_train_mocap = x_train_mocap.reshape(-1, 200, 189, 1)
     print("x_train_mocap.shape",x_train_mocap.shape)
 
@@ -446,8 +445,8 @@ def feed_data(config):
 
     if model_name == 'text_speech_mocap' or model_name == 'text_speech_mocap_attention':
         print(model_name)
-        nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2, data_type)
-        x_train_speech = get_speech_features(data2, data_type=data_type)
+        nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2, data_type=data_type)
+        x_train_speech, _, _ = get_speech_features(data2, data_type=data_type)
         x_train_mocap = get_mocap(data2, data_type=data_type)
         Y = get_label(data2, emotions_used, data_type=data_type)
 
@@ -505,7 +504,7 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
-    if model_name == 'speech_dense' or model_name == 'speech_lstm' or model_name == 'speech_lstm_attention' or model_name == 'speech_delta':
+    if model_name == 'speech_delta':
         x_train_speech, deltas, deltasdeltas = get_speech_features(data2, data_type=data_type)
         xtrain = np.empty((2659, 100, 34, 3), dtype=np.float32)
         xtrain[:, :, :, 0] = x_train_speech
@@ -515,6 +514,20 @@ def feed_data(config):
         Y = get_label(data2, emotions_used, data_type=data_type)
 
         xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(xtrain, Y,
+                                                               test_size=test_size,
+                                                               random_state=split_seed,
+                                                               shuffle=True)
+
+        xtrain = xtrain_sp
+        xtest = xtest_sp
+
+        return xtrain, ytrain, xtest, ytest
+
+    if model_name == 'speech_dense' or model_name == 'speech_lstm' or model_name == 'speech_lstm_attention':
+        x_train_speech, _, _ = get_speech_features(data2, data_type=data_type)
+        Y = get_label(data2, emotions_used, data_type=data_type)
+
+        xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(x_train_speech, Y,
                                                                test_size=test_size,
                                                                random_state=split_seed,
                                                                shuffle=True)

@@ -23,7 +23,7 @@ def load():
     layer = Conv2D(256, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
     layer = BatchNormalization()(layer)
     layer = Dropout(0.2)(layer)
-    layer = Reshape((-1, 100))(layer)
+    layer = Reshape((-1, 640))(layer)
 
     layer = Bidirectional(LSTM(128, return_sequences=True, recurrent_dropout=0.2))(layer)
     layer = Dropout(0.2)(layer)
