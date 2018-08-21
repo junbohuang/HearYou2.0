@@ -507,9 +507,9 @@ def feed_data(config):
     if model_name == 'speech_delta':
         x_train_speech, deltas, deltasdeltas = get_speech_features(data2, data_type=data_type)
         xtrain = np.empty((2659, 100, 34, 3), dtype=np.float32)
-        xtrain[:, :, :, 0] = x_train_speech
-        xtrain[:, :, :, 1] = deltas
-        xtrain[:, :, :, 2] = deltasdeltas
+        xtrain[:, :, :, 0] = x_train_speech[:, :, 8:20]
+        xtrain[:, :, :, 1] = deltas[:, :, 8:20]
+        xtrain[:, :, :, 2] = deltasdeltas[:, :, 8:20]
 
         Y = get_label(data2, emotions_used, data_type=data_type)
 

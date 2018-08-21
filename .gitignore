@@ -1,4 +1,4 @@
-.idea/
+.idea/*
 *.ipynb
 *.h5
 datasets/
