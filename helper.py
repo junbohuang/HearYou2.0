@@ -20,6 +20,59 @@ from callbacks.ConfusionMatrixLogger import ConfusionMatrixPlotter
 from callbacks.AccuracyLossLogger import AccLossPlotter
 
 
+def detect_gender(utterance):
+    if utterance['id'][-4] == "M":
+        gender = "male"
+    else:
+        gender = "female"
+    return gender
+
+
+def detect_session(utterance):
+    session = utterance['id'][4]
+    return int(session)
+
+
+def detect_acting_type(utterance):
+    if utterance['id'][7:12] == "impro":
+        acting_type = "improvised"
+    else:
+        acting_type = "scripted"
+
+    return acting_type
+
+
+def count_utterance(data):
+    ses1 = 0
+    ses2 = 0
+    ses3 = 0
+    ses4 = 0
+    ses5 = 0
+    for utt in data:
+        ses = detect_session(utt)
+        if ses == 1:
+            ses1 += 1
+        if ses == 2:
+            ses2 += 1
+        if ses == 3:
+            ses3 += 1
+        if ses == 4:
+            ses4 += 1
+        if ses == 5:
+            ses5 += 1
+    total_utt = ses1 + ses2 + ses3 + ses4 + ses5
+    return total_utt, ses1, ses2, ses3, ses4, ses5
+
+
+def dir_setup():
+    if not os.path.exists('./plots'):
+        os.mkdir('./plots')
+    if not os.path.exists('./logs'):
+        os.mkdir('./logs')
+    if not os.path.exists('./datasets'):
+        os.mkdir('./datasets')
+
+
 def split_wav(wav, emotions):
     (nchannels, sampwidth, framerate, nframes, comptype, compname), samples = wav
 
@@ -150,124 +203,22 @@ def get_emotions(path_to_emotions, filename):
     return emotion
 
 
-
-def train(config, model, xtrain, ytrain, xtest, ytest):
-    print("xtrain", xtrain.shape)
-    print("ytrain", ytrain.shape)
-    print("xtest", xtest.shape)
-    print("ytest", ytest.shape)
-    epochs = config['epochs']
-    batch_size = config['batch_size']
-    model_name = config['model'].split('.')[-1]
-    emotion_class = config['emotion']
-    validation_split = np.array(config['train_val_test_split'])[1] / \
-                       (np.array(config['train_val_test_split'])[1] +
-                        np.array(config['train_val_test_split'])[0])
-
-    path_to_log = './logs/' + model_name
-
-    csv_name = path_to_log + '/' + model_name + '.log'
-    csv_logger = CSVLogger(csv_name)
-
-    accloss_logger = AccLossPlotter(model_name)
-
-    class_weights = class_weight.compute_class_weight('balanced',
-                                                      np.unique(ytrain.argmax(1)),
-                                                      ytrain.argmax(1))
-    class_weights_dict = {}
-    for n in range(len(class_weights)):
-        class_weights_dict[n] = class_weights[n]
-    print("class_weights_dict", class_weights_dict)
-    # tensorboard = TensorBoard(log_dir=path_to_log, histogram_freq=1, write_graph=False, write_grads=False)
-    # cm_logger = ConfusionMatrixPlotter(xtrain, ytrain, emotion_class, model_name)
-
-    ## FOR SAVING MODEL
-    save_path = os.path.join(path_to_log, model_name) + '.h5'
-    # check_pointer = ModelCheckpoint(save_path, save_best_only=True)
-
-    ## FOR DEBUG
-    # K.set_session(
-    #     tf_debug.TensorBoardDebugWrapperSession(
-    #         tf.Session(), "127.0.0.1:8080"))
-    # K.get_session().run(tf.global_variables_initializer())
-
-    with tf.Session() as sess:
-        sess.run(tf.global_variables_initializer())
-
-        model.fit(xtrain, ytrain,
-                    batch_size=batch_size, epochs=epochs, verbose=1,
-                    validation_split=validation_split, shuffle=True,
-                    callbacks=[csv_logger, accloss_logger],
-                    class_weight=class_weights_dict)
-        print("trained. saving model...")
-        model.save_weights(save_path)
-        print("Saved model to disk")
-
-        print("evaluating...")
-        scores = model.evaluate(x=xtest, y=ytest, verbose=0)
-        for n in range(len(scores)):
-            if n == 0:
-                print("%s: %.3f" % (model.metrics_names[n], scores[n]))
-            else:
-                print("%s: %.2f%%" % (model.metrics_names[n], scores[n] * 100))
-
-        print("predicting...")
-        prediction = model.predict(xtest, verbose=0)
-        plot_cm(model_name, emotion_class, ytest, prediction)
-        print("confusion matrix saved!")
-
-    return model
-# def evaluate(config, model, xtest, ytest):
-#     model_name = config['model'].split('.')[-1]
-#     emotion_class = config['emotion']
-#     with tf.Session() as sess:
-#         sess.run(tf.global_variables_initializer())
-#         model.load_weights(save_path)
-#         print("evaluating...")
-#         scores = model.evaluate(x=xtest, y=ytest, verbose=0)
-#         for n in range(len(scores)):
-#             if n == 0:
-#                 print("%s: %.3f" % (model.metrics_names[n], scores[n]))
-#             else:
-#                 print("%s: %.2f%%" % (model.metrics_names[n], scores[n] * 100))
-#
-#         print("predicting...")
-#         prediction = model.predict(xtest, verbose=0)
-#     plot_cm(model_name, emotion_class, ytest, prediction)
-#     print("confusion matrix saved!")
-
-def dir_setup():
-    if not os.path.exists('./plots'):
-        os.mkdir('./plots')
-    if not os.path.exists('./logs'):
-        os.mkdir('./logs')
-    if not os.path.exists('./datasets'):
-        os.mkdir('./datasets')
-
-
-# def make_movie(images, path, width, height):
-#
-#     video_name = os.path.join(path, 'evolutionary_confusion_matrix.mp4')
-#
-#     video = cv2.VideoWriter(filename=video_name,
-#                             fourcc=-1,
-#                             fps=3,
-#                             frameSize=(width,height),
-#                             isColor=True)
-#
-#     for image in images:
-#         video.write(cv2.imread(os.path.join(path, image)))
-#
-#     video.release()
-#     cv2.destroyAllWindows()
-
-def get_transcription(data2):
+def get_transcription(data2, data_type="improvised"):
     code_path = os.path.dirname(os.path.realpath(os.getcwd()))
     print("getting trarnscription...")
     text = []
 
     for ses_mod in data2:
-        text.append(ses_mod['transcription'])
+        if data_type == "all":
+            text.append(ses_mod['transcription'])
+
+        elif data_type == "scripted":
+            if detect_acting_type(ses_mod) == "scripted":
+                text.append(ses_mod['transcription'])
+
+        elif data_type == "improvised":
+            if detect_acting_type(ses_mod) == "improvised":
+                text.append(ses_mod['transcription'])
 
     MAX_SEQUENCE_LENGTH = 500
 
@@ -340,27 +291,6 @@ def calculate_features(frames, freq, options):
         deriv_st_f[:st_f.shape[0], 0] = st_f[:, 0]
         return deriv_st_f
 
-# def get_speech_features(data2, data_type="all"):
-#     framerate = 16000
-#     print("creating features for speech...")
-#     x_train_speech = []
-#
-#     counter = 0
-#     for ses_mod in data2:
-#         if data_type == "all":
-#             x_head = ses_mod['signal']
-#             st_features = calculate_features(x_head, framerate, None)
-#             st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
-#             x_train_speech.append(st_features.T)
-#             counter += 1
-#             if (counter % 1000 == 0):
-#                 print(counter)
-#
-#     x_train_speech = np.array(x_train_speech)
-#     print("x_train_speech shape: ", x_train_speech.shape)
-#
-#     return x_train_speech
-
 
 def get_speech_features(data2, data_type="improvised"):
     framerate = 16000
@@ -419,69 +349,60 @@ def get_speech_features(data2, data_type="improvised"):
     return x_train_speech, deltas, deltasdeltas
 
 
-def detect_gender(utterance):
-    if utterance['id'][-4] == "M":
-        gender = "male"
-    else:
-        gender = "female"
-    return gender
-
-
-def detect_session(utterance):
-    session = utterance['id'][4]
-    return int(session)
-
-
-def detect_acting_type(utterance):
-    if utterance['id'][7:12] == "impro":
-        acting_type = "improvised"
-    else:
-        acting_type = "scripted"
-
-    return acting_type
-
-
-def count_utterance(data):
-    ses1 = 0
-    ses2 = 0
-    ses3 = 0
-    ses4 = 0
-    ses5 = 0
-    for utt in data:
-        ses = detect_session(utt)
-        if ses == 1:
-            ses1 += 1
-        if ses == 2:
-            ses2 += 1
-        if ses == 3:
-            ses3 += 1
-        if ses == 4:
-            ses4 += 1
-        if ses == 5:
-            ses5 += 1
-    total_utt = ses1 + ses2 + ses3 + ses4 + ses5
-    return total_utt, ses1, ses2, ses3, ses4, ses5
-
-
-def get_mocap(data2):
+def get_mocap(data2, data_type="improvised"):
     print("creating mocap data...")
     x_train_mocap = []
     for ses_mod in data2:
-        x_head = ses_mod['mocap_head']
-        if (x_head.shape != (200, 18)):
-            x_head = np.zeros((200, 18))
-        x_head[np.isnan(x_head)] = 0
-        x_hand = ses_mod['mocap_hand']
-        if (x_hand.shape != (200, 6)):
-            x_hand = np.zeros((200, 6))
-        x_hand[np.isnan(x_hand)] = 0
-        x_rot = ses_mod['mocap_rot']
-        if (x_rot.shape != (200, 165)):
-            x_rot = np.zeros((200, 165))
-        x_rot[np.isnan(x_rot)] = 0
-        x_mocap = np.concatenate((x_head, x_hand), axis=1)
-        x_mocap = np.concatenate((x_mocap, x_rot), axis=1)
-        x_train_mocap.append(x_mocap)
+        if data_type == "all":
+            x_head = ses_mod['mocap_head']
+            if (x_head.shape != (200, 18)):
+                x_head = np.zeros((200, 18))
+            x_head[np.isnan(x_head)] = 0
+            x_hand = ses_mod['mocap_hand']
+            if (x_hand.shape != (200, 6)):
+                x_hand = np.zeros((200, 6))
+            x_hand[np.isnan(x_hand)] = 0
+            x_rot = ses_mod['mocap_rot']
+            if (x_rot.shape != (200, 165)):
+                x_rot = np.zeros((200, 165))
+            x_rot[np.isnan(x_rot)] = 0
+            x_mocap = np.concatenate((x_head, x_hand), axis=1)
+            x_mocap = np.concatenate((x_mocap, x_rot), axis=1)
+            x_train_mocap.append(x_mocap)
+        elif data_type == "scripted":
+            if detect_acting_type(ses_mod) == "scripted":
+                x_head = ses_mod['mocap_head']
+                if (x_head.shape != (200, 18)):
+                    x_head = np.zeros((200, 18))
+                x_head[np.isnan(x_head)] = 0
+                x_hand = ses_mod['mocap_hand']
+                if (x_hand.shape != (200, 6)):
+                    x_hand = np.zeros((200, 6))
+                x_hand[np.isnan(x_hand)] = 0
+                x_rot = ses_mod['mocap_rot']
+                if (x_rot.shape != (200, 165)):
+                    x_rot = np.zeros((200, 165))
+                x_rot[np.isnan(x_rot)] = 0
+                x_mocap = np.concatenate((x_head, x_hand), axis=1)
+                x_mocap = np.concatenate((x_mocap, x_rot), axis=1)
+                x_train_mocap.append(x_mocap)
+        elif data_type == "improvised":
+            if detect_acting_type(ses_mod) == "scripted":
+                x_head = ses_mod['mocap_head']
+                if (x_head.shape != (200, 18)):
+                    x_head = np.zeros((200, 18))
+                x_head[np.isnan(x_head)] = 0
+                x_hand = ses_mod['mocap_hand']
+                if (x_hand.shape != (200, 6)):
+                    x_hand = np.zeros((200, 6))
+                x_hand[np.isnan(x_hand)] = 0
+                x_rot = ses_mod['mocap_rot']
+                if (x_rot.shape != (200, 165)):
+                    x_rot = np.zeros((200, 165))
+                x_rot[np.isnan(x_rot)] = 0
+                x_mocap = np.concatenate((x_head, x_hand), axis=1)
+                x_mocap = np.concatenate((x_mocap, x_rot), axis=1)
+                x_train_mocap.append(x_mocap)
 
     x_train_mocap = np.array(x_train_mocap)
     print("x_train_mocap.shape", x_train_mocap.shape)
@@ -518,16 +439,17 @@ def feed_data(config):
     split_seed = config['split_seed']
     code_path = os.path.dirname(os.path.realpath(os.getcwd()))
     test_size = train_val_test_split[-1]
+    data_type = config['data_type']
 
     with open(code_path + '/HearYou2.0/datasets/data_collected.pickle', 'rb') as handle:
         data2 = pickle.load(handle)
 
     if model_name == 'text_speech_mocap' or model_name == 'text_speech_mocap_attention':
         print(model_name)
-        nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2)
-        x_train_speech = get_speech_features(data2)
-        x_train_mocap = get_mocap(data2)
-        Y = get_label(data2, emotions_used)
+        nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2, data_type)
+        x_train_speech = get_speech_features(data2, data_type=data_type)
+        x_train_mocap = get_mocap(data2, data_type=data_type)
+        Y = get_label(data2, emotions_used, data_type=data_type)
 
         xtrain_sp, xtest_sp, ytrain, ytest= train_test_split(x_train_speech, Y,
                                                                    test_size=test_size,
@@ -550,9 +472,9 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
     if model_name == 'text_speech' or model_name == 'text_speech_attention':
-        nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2)
-        x_train_speech = get_speech_features(data2)
-        Y = get_label(data2, emotions_used)
+        nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2, data_type=data_type)
+        x_train_speech = get_speech_features(data2, data_type=data_type)
+        Y = get_label(data2, emotions_used, data_type=data_type)
 
         xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(x_train_speech, Y,
                                                                test_size=test_size,
@@ -570,8 +492,8 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
     if model_name == 'text_lstm' or model_name == 'text_lstm_attention':
-        nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2)
-        Y = get_label(data2, emotions_used)
+        nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2, data_type=data_type)
+        Y = get_label(data2, emotions_used, data_type=data_type)
 
         xtrain_tx, xtest_tx, ytrain, ytest = train_test_split(x_train_text, Y,
                                                      test_size=test_size,
@@ -584,13 +506,13 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
     if model_name == 'speech_dense' or model_name == 'speech_lstm' or model_name == 'speech_lstm_attention' or model_name == 'speech_delta':
-        x_train_speech, deltas, deltasdeltas = get_speech_features(data2)
+        x_train_speech, deltas, deltasdeltas = get_speech_features(data2, data_type=data_type)
         xtrain = np.empty((2659, 100, 34, 3), dtype=np.float32)
         xtrain[:, :, :, 0] = x_train_speech
         xtrain[:, :, :, 1] = deltas
         xtrain[:, :, :, 2] = deltasdeltas
 
-        Y = get_label(data2, emotions_used)
+        Y = get_label(data2, emotions_used, data_type=data_type)
 
         xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(xtrain, Y,
                                                                test_size=test_size,
@@ -603,9 +525,9 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest
 
     if model_name == 'speech_mocap' or model_name == 'speech_mocap_attention':
-        x_train_speech = get_speech_features(data2)
-        x_train_mocap = get_mocap(data2)
-        Y = get_label(data2, emotions_used)
+        x_train_speech = get_speech_features(data2, data_type=data_type)
+        x_train_mocap = get_mocap(data2, data_type=data_type)
+        Y = get_label(data2, emotions_used, data_type=data_type)
 
         xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(x_train_speech, Y,
                                                                test_size=test_size,
@@ -622,8 +544,8 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest
 
     if model_name == 'mocap_conv':
-        x_train_mocap = get_mocap(data2)
-        Y = get_label(data2, emotions_used)
+        x_train_mocap = get_mocap(data2, data_type=data_type)
+        Y = get_label(data2, emotions_used, data_type=data_type)
 
         xtrain_mo, xtest_mo, ytrain, ytest = train_test_split(x_train_mocap, Y,
                                                      test_size=test_size,
@@ -636,8 +558,8 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest
 
     if model_name == 'mocap_lstm' or 'mocap_lstm_attention':
-        x_train_mocap = get_mocap(data2)
-        Y = get_label(data2, emotions_used)
+        x_train_mocap = get_mocap(data2, data_type=data_type)
+        Y = get_label(data2, emotions_used, data_type=data_type)
 
         x_train_mocap = x_train_mocap.reshape(-1, 200, 189)
         xtrain_mo, xtest_mo, ytrain, ytest = train_test_split(x_train_mocap, Y,
@@ -679,3 +601,64 @@ def load_model(config):
     return model, xtrain, ytrain, xtest, ytest
 
 
+def train(config, model, xtrain, ytrain, xtest, ytest):
+    print("xtrain", xtrain.shape)
+    print("ytrain", ytrain.shape)
+    print("xtest", xtest.shape)
+    print("ytest", ytest.shape)
+    epochs = config['epochs']
+    batch_size = config['batch_size']
+    model_name = config['model'].split('.')[-1]
+    emotion_class = config['emotion']
+    validation_split = np.array(config['train_val_test_split'])[1] / \
+                       (np.array(config['train_val_test_split'])[1] +
+                        np.array(config['train_val_test_split'])[0])
+
+    path_to_log = './logs/' + model_name
+
+    csv_name = path_to_log + '/' + model_name + '.log'
+    csv_logger = CSVLogger(csv_name)
+
+    accloss_logger = AccLossPlotter(model_name)
+
+    class_weights = class_weight.compute_class_weight('balanced',
+                                                      np.unique(ytrain.argmax(1)),
+                                                      ytrain.argmax(1))
+    class_weights_dict = {}
+    for n in range(len(class_weights)):
+        class_weights_dict[n] = class_weights[n]
+    print("class_weights_dict", class_weights_dict)
+    # tensorboard = TensorBoard(log_dir=path_to_log, histogram_freq=1, write_graph=False, write_grads=False)
+    # cm_logger = ConfusionMatrixPlotter(xtrain, ytrain, emotion_class, model_name)
+
+    ## FOR SAVING MODEL
+    save_path = os.path.join(path_to_log, model_name) + '.h5'
+    # check_pointer = ModelCheckpoint(save_path, save_best_only=True)
+
+
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+
+        model.fit(xtrain, ytrain,
+                    batch_size=batch_size, epochs=epochs, verbose=1,
+                    validation_split=validation_split, shuffle=True,
+                    callbacks=[csv_logger, accloss_logger],
+                    class_weight=class_weights_dict)
+        print("trained. saving model...")
+        model.save_weights(save_path)
+        print("Saved model to disk")
+
+        print("evaluating...")
+        scores = model.evaluate(x=xtest, y=ytest, verbose=0)
+        for n in range(len(scores)):
+            if n == 0:
+                print("%s: %.3f" % (model.metrics_names[n], scores[n]))
+            else:
+                print("%s: %.2f%%" % (model.metrics_names[n], scores[n] * 100))
+
+        print("predicting...")
+        prediction = model.predict(xtest, verbose=0)
+        plot_cm(model_name, emotion_class, ytest, prediction)
+        print("confusion matrix saved!")
+
+    return model
