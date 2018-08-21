@@ -152,7 +152,10 @@ def get_emotions(path_to_emotions, filename):
 
 
 def train(config, model, xtrain, ytrain, xtest, ytest):
-
+    print("xtrain", xtrain.shape)
+    print("ytrain", ytrain.shape)
+    print("xtest", xtest.shape)
+    print("ytest", ytest.shape)
     epochs = config['epochs']
     batch_size = config['batch_size']
     model_name = config['model'].split('.')[-1]
@@ -174,7 +177,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
     class_weights_dict = {}
     for n in range(len(class_weights)):
         class_weights_dict[n] = class_weights[n]
-
+    print("class_weights_dict", class_weights_dict)
     # tensorboard = TensorBoard(log_dir=path_to_log, histogram_freq=1, write_graph=False, write_grads=False)
     # cm_logger = ConfusionMatrixPlotter(xtrain, ytrain, emotion_class, model_name)
 
@@ -310,26 +313,154 @@ def get_transcription(data2):
 
     return nb_words, g_word_embedding_matrix, x_train_text
 
+def calculate_features(frames, freq, options):
+    window_sec = 0.2
+    window_n = int(freq * window_sec)
 
-def get_speech_features(data2):
+    st_f = stFeatureExtraction(frames, freq, window_n, window_n / 2)
+
+    if st_f.shape[1] > 2:
+        i0 = 1
+        i1 = st_f.shape[1] - 1
+        if i1 - i0 < 1:
+            i1 = i0 + 1
+
+        deriv_st_f = np.zeros((st_f.shape[0], i1 - i0), dtype=float)
+        for i in range(i0, i1):
+            i_left = i - 1
+            i_right = i + 1
+            deriv_st_f[:st_f.shape[0], i - i0] = st_f[:, i]
+        return deriv_st_f
+    elif st_f.shape[1] == 2:
+        deriv_st_f = np.zeros((st_f.shape[0], 1), dtype=float)
+        deriv_st_f[:st_f.shape[0], 0] = st_f[:, 0]
+        return deriv_st_f
+    else:
+        deriv_st_f = np.zeros((st_f.shape[0], 1), dtype=float)
+        deriv_st_f[:st_f.shape[0], 0] = st_f[:, 0]
+        return deriv_st_f
+
+# def get_speech_features(data2, data_type="all"):
+#     framerate = 16000
+#     print("creating features for speech...")
+#     x_train_speech = []
+#
+#     counter = 0
+#     for ses_mod in data2:
+#         if data_type == "all":
+#             x_head = ses_mod['signal']
+#             st_features = calculate_features(x_head, framerate, None)
+#             st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
+#             x_train_speech.append(st_features.T)
+#             counter += 1
+#             if (counter % 1000 == 0):
+#                 print(counter)
+#
+#     x_train_speech = np.array(x_train_speech)
+#     print("x_train_speech shape: ", x_train_speech.shape)
+#
+#     return x_train_speech
+
+
+def get_speech_features(data2, data_type="improvised"):
     framerate = 16000
     print("creating features for speech...")
+    print(data_type)
     x_train_speech = []
+    deltas = []
+    deltasdeltas = []
 
     counter = 0
     for ses_mod in data2:
-        x_head = ses_mod['signal']
-        st_features = calculate_features(x_head, framerate, None)
-        st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
-        x_train_speech.append(st_features.T)
-        counter += 1
-        if (counter % 100 == 0):
-            print(counter)
+        if data_type == "all":
+            x_head = ses_mod['signal']
+            st_features = calculate_features(x_head, framerate, None)
+            st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
+            x_train_speech.append(st_features.T)
+            counter += 1
+            if (counter % 500 == 0):
+                print(counter)
+        elif data_type == "scripted":
+            if detect_acting_type(ses_mod) == "scripted":
+                x_head = ses_mod['signal']
+                st_features = calculate_features(x_head, framerate, None)
+                st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
+                x_train_speech.append(st_features.T)
+                counter += 1
+                if (counter % 500 == 0):
+                    print(counter)
+        elif data_type == "improvised":
+            if detect_acting_type(ses_mod) == "improvised":
+                x_head = ses_mod['signal']
+                st_features = calculate_features(x_head, framerate, None)
+                delta = stDelta(st_features, 2)
+                deltadelta = stDelta(delta, 2)
+                st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
+                delta, _ = pad_sequence_into_array(delta, maxlen=100)
+                deltadelta, _ = pad_sequence_into_array(deltadelta, maxlen=100)
 
+                x_train_speech.append(st_features.T)
+                deltas.append(delta.T)
+                deltasdeltas.append(deltadelta.T)
+
+                counter += 1
+                if (counter % 500 == 0):
+                    print(counter)
+        else:
+            raise ValueError
     x_train_speech = np.array(x_train_speech)
-    print("x_train_speech shape: ", x_train_speech.shape)
+    deltas = np.array(deltas)
+    deltasdeltas = np.array(deltasdeltas)
 
-    return x_train_speech
+    print("x_train_speech shape: ", x_train_speech.shape)
+    print("deltas shape: ", deltas.shape)
+    print("deltasdeltas shape: ", deltasdeltas.shape)
+
+    return x_train_speech, deltas, deltasdeltas
+
+
+def detect_gender(utterance):
+    if utterance['id'][-4] == "M":
+        gender = "male"
+    else:
+        gender = "female"
+    return gender
+
+
+def detect_session(utterance):
+    session = utterance['id'][4]
+    return int(session)
+
+
+def detect_acting_type(utterance):
+    if utterance['id'][7:12] == "impro":
+        acting_type = "improvised"
+    else:
+        acting_type = "scripted"
+
+    return acting_type
+
+
+def count_utterance(data):
+    ses1 = 0
+    ses2 = 0
+    ses3 = 0
+    ses4 = 0
+    ses5 = 0
+    for utt in data:
+        ses = detect_session(utt)
+        if ses == 1:
+            ses1 += 1
+        if ses == 2:
+            ses2 += 1
+        if ses == 3:
+            ses3 += 1
+        if ses == 4:
+            ses4 += 1
+        if ses == 5:
+            ses5 += 1
+    total_utt = ses1 + ses2 + ses3 + ses4 + ses5
+    return total_utt, ses1, ses2, ses3, ses4, ses5
 
 
 def get_mocap(data2):
@@ -360,17 +491,25 @@ def get_mocap(data2):
     return x_train_mocap
 
 
-def get_label(data2, emotions_used):
+def get_label(data2, emotions_used, data_type="improvised"):
     print("creating labels...")
     Y = []
     for ses_mod in data2:
-        Y.append(ses_mod['emotion'])
+        if data_type == "all":
+            Y.append(ses_mod['emotion'])
+        elif data_type == "scripted":
+            if detect_acting_type(ses_mod) == "scripted":
+                Y.append(ses_mod['emotion'])
+        elif data_type == "improvised":
+            if detect_acting_type(ses_mod) == "improvised":
+                Y.append(ses_mod['emotion'])
 
     Y = label_binarize(Y, emotions_used)
 
-    print("Y.shape: ",Y.shape)
+    print("Y.shape: ", Y.shape)
 
     return Y
+
 
 def feed_data(config):
     model_name = config['model'].split('.')[-1]
@@ -444,11 +583,16 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
-    if model_name == 'speech_dense' or model_name == 'speech_lstm' or model_name == 'speech_lstm_attention':
-        x_train_speech = get_speech_features(data2)
+    if model_name == 'speech_dense' or model_name == 'speech_lstm' or model_name == 'speech_lstm_attention' or model_name == 'speech_delta':
+        x_train_speech, deltas, deltasdeltas = get_speech_features(data2)
+        xtrain = np.empty((2659, 100, 34, 3), dtype=np.float32)
+        xtrain[:, :, :, 0] = x_train_speech
+        xtrain[:, :, :, 1] = deltas
+        xtrain[:, :, :, 2] = deltasdeltas
+
         Y = get_label(data2, emotions_used)
 
-        xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(x_train_speech, Y,
+        xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(xtrain, Y,
                                                                test_size=test_size,
                                                                random_state=split_seed,
                                                                shuffle=True)
@@ -535,29 +679,3 @@ def load_model(config):
     return model, xtrain, ytrain, xtest, ytest
 
 
-def calculate_features(frames, freq, options):
-    window_sec = 0.2
-    window_n = int(freq * window_sec)
-
-    st_f = stFeatureExtraction(frames, freq, window_n, window_n / 2)
-
-    if st_f.shape[1] > 2:
-        i0 = 1
-        i1 = st_f.shape[1] - 1
-        if i1 - i0 < 1:
-            i1 = i0 + 1
-
-        deriv_st_f = np.zeros((st_f.shape[0], i1 - i0), dtype=float)
-        for i in range(i0, i1):
-            i_left = i - 1
-            i_right = i + 1
-            deriv_st_f[:st_f.shape[0], i - i0] = st_f[:, i]
-        return deriv_st_f
-    elif st_f.shape[1] == 2:
-        deriv_st_f = np.zeros((st_f.shape[0], 1), dtype=float)
-        deriv_st_f[:st_f.shape[0], 0] = st_f[:, 0]
-        return deriv_st_f
-    else:
-        deriv_st_f = np.zeros((st_f.shape[0], 1), dtype=float)
-        deriv_st_f[:st_f.shape[0], 0] = st_f[:, 0]
-        return deriv_st_f
