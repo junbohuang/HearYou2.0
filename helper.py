@@ -506,7 +506,7 @@ def feed_data(config):
 
     if model_name == 'speech_delta':
         x_train_speech, deltas, deltasdeltas = get_speech_features(data2, data_type=data_type)
-        xtrain = np.empty((2659, 100, 34, 3), dtype=np.float32)
+        xtrain = np.empty((2659, 100, 12, 3), dtype=np.float32)
         xtrain[:, :, :, 0] = x_train_speech[:, :, 8:20]
         xtrain[:, :, :, 1] = deltas[:, :, 8:20]
         xtrain[:, :, :, 2] = deltasdeltas[:, :, 8:20]
@@ -615,10 +615,10 @@ def load_model(config):
 
 
 def train(config, model, xtrain, ytrain, xtest, ytest):
-    print("xtrain", xtrain.shape)
-    print("ytrain", ytrain.shape)
-    print("xtest", xtest.shape)
-    print("ytest", ytest.shape)
+    #print("xtrain", xtrain.shape)
+    #print("ytrain", ytrain.shape)
+    #print("xtest", xtest.shape)
+    #print("ytest", ytest.shape)
     epochs = config['epochs']
     batch_size = config['batch_size']
     model_name = config['model'].split('.')[-1]
