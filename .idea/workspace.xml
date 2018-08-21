@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="167b6649-c8be-4b8d-a6ae-95b39f9de463" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helper.py" afterPath="$PROJECT_DIR$/helper.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/speech_delta.py" afterPath="$PROJECT_DIR$/models/speech_delta.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,8 +19,8 @@
           <file leaf-file-name="helper.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/helper.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-688">
-                  <caret line="533" column="0" lean-forward="true" selection-start-line="533" selection-start-column="0" selection-end-line="533" selection-end-column="0" />
+                <state relative-caret-position="293">
+                  <caret line="511" column="53" lean-forward="false" selection-start-line="511" selection-start-column="53" selection-end-line="511" selection-end-column="53" />
                   <folding>
                     <element signature="e#0#11#0" expanded="true" />
                   </folding>
@@ -909,8 +908,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/helper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-688">
-          <caret line="533" column="0" lean-forward="true" selection-start-line="533" selection-start-column="0" selection-end-line="533" selection-end-column="0" />
+        <state relative-caret-position="293">
+          <caret line="511" column="53" lean-forward="false" selection-start-line="511" selection-start-column="53" selection-end-line="511" selection-end-column="53" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
