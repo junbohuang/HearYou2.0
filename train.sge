@@ -1,5 +1,5 @@
 #!/bin/bash
-#$ -N all_impro
+#$ -N sp_delta_mfcc
 #$ -l mem=32G
 #$ -cwd
 #$ -l cuda=1
@@ -41,7 +41,7 @@ source activate pimv
 
 
 echo "rolling..."
-PYTHONPATH=$PIMV_ROOT/$USER WALLTIME=12:00:00 python main.py -c configs/text_speech_mocap_attention.json
+PYTHONPATH=$PIMV_ROOT/$USER WALLTIME=12:00:00 python main.py -c configs/speech_delta.json
 
 
 echo ""

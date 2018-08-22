@@ -15,14 +15,20 @@ def load():
     layer = input_layer
 
     layer = Conv2D(128, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
-    layer = BatchNormalization()(layer)
-    layer = MaxPooling2D()(layer)
+    #layer = BatchNormalization()(layer)
+    layer = MaxPooling2D(padding='same')(layer)
     layer = Dropout(0.2)(layer)
     layer = Conv2D(256, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
-    layer = BatchNormalization()(layer)
+    #layer = BatchNormalization()(layer)
     layer = Dropout(0.2)(layer)
     layer = Conv2D(256, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
-    layer = BatchNormalization()(layer)
+    #layer = BatchNormalization()(layer)
+    layer = Dropout(0.2)(layer)
+    layer = Conv2D(256, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
+    #layer = BatchNormalization()(layer)
+    layer = Dropout(0.2)(layer)
+    layer = Conv2D(256, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
+    #layer = BatchNormalization()(layer)
     layer = Dropout(0.2)(layer)
     layer = Reshape((-1, 320))(layer)
 
@@ -32,8 +38,8 @@ def load():
     layer = Dropout(0.2)(layer)
     layer = AttentionDecoder(256, 256)(layer)
     layer = Flatten()(layer)
-
-
+    layer = Dense(256, activation="relu")(layer)
+    layer = BatchNormalization()(layer)
     output_layer = Dense(4, activation='softmax')(layer)
 
     model = Model(inputs=input_layer, outputs=output_layer)
