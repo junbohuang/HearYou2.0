@@ -34,18 +34,18 @@ def load():
 
     layer = Bidirectional(LSTM(128, return_sequences=True, recurrent_dropout=0.2))(layer)
     layer = Dropout(0.2)(layer)
-    layer = Bidirectional(LSTM(128, return_sequences=True, recurrent_dropout=0.2))(layer)
+    layer = LSTM(128, return_sequences=True, recurrent_dropout=0.2)(layer)
     layer = Dropout(0.2)(layer)
-    layer = AttentionDecoder(256, 256)(layer)
+    layer = AttentionDecoder(128, 128)(layer)
     layer = Flatten()(layer)
-    layer = Dense(512, activation="relu")(layer)
+    layer = Dense(256, activation="relu")(layer)
     layer = BatchNormalization()(layer)
     output_layer = Dense(4, activation='softmax')(layer)
 
     model = Model(inputs=input_layer, outputs=output_layer)
 
     metrics = top_k_accuracy()
-    adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False, clipnorm=3.0)
+    adam = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False, clipnorm=4.0)
     model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=metrics)
 
     return model

@@ -1,5 +1,5 @@
 #!/bin/bash
-#$ -N sp_delta_mfcc
+#$ -N sp_delta_mfcc_improvised
 #$ -l mem=32G
 #$ -cwd
 #$ -l cuda=1
