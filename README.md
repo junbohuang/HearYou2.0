@@ -27,12 +27,11 @@ run all configurations stored in *./configs* if *-c flag* is not given
 
 | data type         | Scripted| Improvised | Both |
 |:-----------------:|:-------:|:----------:|:----:|
-| text              | xx%     |    xx%     |  xx% |
+| text              | xx%     |    xx%     |  61% |
 | speech            | xx%     |    xx%     |  51% |
-| mocap             | xx%     |    xx%     |  xx% |
-| text+speech       | xx%     |    xx%     |  xx% |
-| speech+mocap      | xx%     |    xx%     |  54.12% |
-| text+speech+mocap | xx%     |    xx%     |  xx% |
+| mocap             | xx%     |    xx%     |  45% |
+| text+speech       | xx%     |    xx%     |  67% |
+| text+speech+mocap | xx%     |    xx%     |  70% |
 
 | feature type      | 34      | MFCC&DD    | 34&DD|
 |:-----------------:|:-------:|:----------:|:----:|
