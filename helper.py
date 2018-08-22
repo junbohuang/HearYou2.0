@@ -85,8 +85,6 @@ def get_count(utterance_count_dict, data_type):
 
         else:
             raise NotImplementedError(data_type + " is beyond the data type...")
-    # print("num_train", num_train)
-    # print("num_test", num_test)
 
     return num_train, num_test
 
@@ -98,6 +96,8 @@ def dir_setup():
         os.mkdir('./logs')
     if not os.path.exists('./datasets'):
         os.mkdir('./datasets')
+    if not os.path.exists('./outputs'):
+        os.mkdir('./outputs')
 
 
 def split_wav(wav, emotions):
