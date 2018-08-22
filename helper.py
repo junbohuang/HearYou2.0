@@ -30,8 +30,7 @@ def detect_gender(utterance):
 
 def detect_session(utterance):
     session = utterance['id'][4]
-    return int(session)
-
+    return "ses" + session
 
 def detect_acting_type(utterance):
     if utterance['id'][7:12] == "impro":
@@ -43,25 +42,53 @@ def detect_acting_type(utterance):
 
 
 def count_utterance(data):
-    ses1 = 0
-    ses2 = 0
-    ses3 = 0
-    ses4 = 0
-    ses5 = 0
+    utterance_count_dict = {
+        "ses1": {
+            "scripted": {"male": 0, "female": 0},
+            "improvised": {"male": 0, "female": 0}},
+        "ses2": {
+            "scripted": {"male": 0, "female": 0},
+            "improvised": {"male": 0, "female": 0}},
+        "ses3": {
+            "scripted": {"male": 0, "female": 0},
+            "improvised": {"male": 0, "female": 0}},
+        "ses4": {
+            "scripted": {"male": 0, "female": 0},
+            "improvised": {"male": 0, "female": 0}},
+        "ses5": {
+            "scripted": {"male": 0, "female": 0},
+            "improvised": {"male": 0, "female": 0}}}
+
     for utt in data:
         ses = detect_session(utt)
-        if ses == 1:
-            ses1 += 1
-        if ses == 2:
-            ses2 += 1
-        if ses == 3:
-            ses3 += 1
-        if ses == 4:
-            ses4 += 1
-        if ses == 5:
-            ses5 += 1
-    total_utt = ses1 + ses2 + ses3 + ses4 + ses5
-    return total_utt, ses1, ses2, ses3, ses4, ses5
+        acting_type = detect_acting_type(utt)
+        gender = detect_gender(utt)
+        utterance_count_dict[ses][acting_type][gender] += 1
+
+    return utterance_count_dict
+
+
+def get_count(utterance_count_dict, data_type):
+    num_train = 0
+    num_test = 0
+
+    for ses in ["ses1", "ses2", "ses3", "ses4"]:
+        if data_type == "improvised" or data_type == "scripted":
+            num_train += sum(utterance_count_dict[ses][data_type].values())
+            num_test = sum(utterance_count_dict["ses5"][data_type].values())
+
+        elif data_type == "all":
+            num_train += sum(utterance_count_dict[ses]["scripted"].values()) + sum(
+                utterance_count_dict[ses]["improvised"].values())
+            num_test = sum(utterance_count_dict["ses5"]["scripted"].values()) + sum(
+                utterance_count_dict["ses5"]["improvised"].values())
+
+        else:
+            raise NotImplementedError(data_type + " is beyond the data type...")
+    # print("num_train", num_train)
+    # print("num_test", num_test)
+
+    return num_train, num_test
 
 
 def dir_setup():
@@ -203,22 +230,22 @@ def get_emotions(path_to_emotions, filename):
     return emotion
 
 
-def get_transcription(data2, data_type="improvised"):
+def get_transcription(data, data_type="improvised"):
     code_path = os.path.dirname(os.path.realpath(os.getcwd()))
     print("getting trarnscription...")
     text = []
 
-    for ses_mod in data2:
+    for utterance in data:
         if data_type == "all":
-            text.append(ses_mod['transcription'])
+            text.append(utterance['transcription'])
 
         elif data_type == "scripted":
-            if detect_acting_type(ses_mod) == "scripted":
-                text.append(ses_mod['transcription'])
+            if detect_acting_type(utterance) == "scripted":
+                text.append(utterance['transcription'])
 
         elif data_type == "improvised":
-            if detect_acting_type(ses_mod) == "improvised":
-                text.append(ses_mod['transcription'])
+            if detect_acting_type(utterance) == "improvised":
+                text.append(utterance['transcription'])
 
     MAX_SEQUENCE_LENGTH = 500
 
@@ -292,77 +319,131 @@ def calculate_features(frames, freq, options):
         return deriv_st_f
 
 
-def get_speech_features(data2, data_type="improvised"):
+def get_speech_features(data, data_type="improvised", feature_type="mfcc"):
     framerate = 16000
+    eps = 1e-5
     print("creating features for speech...")
     print(data_type)
-    x_train_speech = []
+
+    utterance_count_dict = count_utterance(data)
+    train_size, test_size = get_count(utterance_count_dict, data_type)
+
+    if feature_type == "all":
+        feature_size = 34
+        feature_on = 0
+    elif feature_type == "mfcc":
+        feature_size = 12
+        feature_on = 8
+        feature_off = 20
+    elif feature_type == "logmel":
+        feature_size = 13
+        feature_on = 8
+        feature_off = 20
+    else:
+        raise NotImplementedError(feature_type + "is beyond us...")
+
+    features = []
     deltas = []
-    deltasdeltas = []
+    deltadeltas = []
+    speech_features = np.zeros((train_size + test_size, 100, feature_size, 3))
 
     counter = 0
-    for ses_mod in data2:
+
+    for utterance in data:
         if data_type == "all":
-            x_head = ses_mod['signal']
+            x_head = utterance['signal']
             st_features = calculate_features(x_head, framerate, None)
+            delta = stDelta(st_features, 2)
+            deltadelta = stDelta(delta, 2)
             st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
-            x_train_speech.append(st_features.T)
+            delta, _ = pad_sequence_into_array(delta, maxlen=100)
+            deltadelta, _ = pad_sequence_into_array(deltadelta, maxlen=100)
+            features.append(st_features.T)
+            deltas.append(delta.T)
+            deltadeltas.append(deltadelta.T)
+
             counter += 1
+
             if (counter % 500 == 0):
                 print(counter)
+
         elif data_type == "scripted":
-            if detect_acting_type(ses_mod) == "scripted":
-                x_head = ses_mod['signal']
-                st_features = calculate_features(x_head, framerate, None)
-                st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
-                x_train_speech.append(st_features.T)
-                counter += 1
-                if (counter % 500 == 0):
-                    print(counter)
-        elif data_type == "improvised":
-            if detect_acting_type(ses_mod) == "improvised":
-                x_head = ses_mod['signal']
+            if detect_acting_type(utterance) == "scripted":
+                x_head = utterance['signal']
                 st_features = calculate_features(x_head, framerate, None)
                 delta = stDelta(st_features, 2)
                 deltadelta = stDelta(delta, 2)
                 st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
                 delta, _ = pad_sequence_into_array(delta, maxlen=100)
                 deltadelta, _ = pad_sequence_into_array(deltadelta, maxlen=100)
-
-                x_train_speech.append(st_features.T)
+                features.append(st_features.T)
                 deltas.append(delta.T)
-                deltasdeltas.append(deltadelta.T)
+                deltadeltas.append(deltadelta.T)
 
                 counter += 1
+
+                if (counter % 500 == 0):
+                    print(counter)
+
+        elif data_type == "improvised":
+            if detect_acting_type(utterance) == "improvised":
+                x_head = utterance['signal']
+                st_features = calculate_features(x_head, framerate, None)
+                delta = stDelta(st_features, 2)
+                deltadelta = stDelta(delta, 2)
+                st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
+                delta, _ = pad_sequence_into_array(delta, maxlen=100)
+                deltadelta, _ = pad_sequence_into_array(deltadelta, maxlen=100)
+                features.append(st_features.T)
+                deltas.append(delta.T)
+                deltadeltas.append(deltadelta.T)
+
+                counter += 1
+
                 if (counter % 500 == 0):
                     print(counter)
         else:
-            raise ValueError
-    x_train_speech = np.array(x_train_speech)
+            raise ValueError(data_type + "is beyond us...")
+
+    # feature normalization
+    features = np.array(features)
     deltas = np.array(deltas)
-    deltasdeltas = np.array(deltasdeltas)
+    deltadeltas = np.array(deltadeltas)
 
-    print("x_train_speech shape: ", x_train_speech.shape)
-    print("deltas shape: ", deltas.shape)
-    print("deltasdeltas shape: ", deltasdeltas.shape)
+    if feature_type == "mfcc":
+        features = features[:, :, feature_on:feature_off]
+        deltas = deltas[:, :, feature_on:feature_off]
+        deltadeltas = deltadeltas[:, :, feature_on:feature_off]
 
-    return x_train_speech, deltas, deltasdeltas
+    mean_features = np.mean(features[:train_size], axis=0)
+    std_features = np.std(features[:train_size], axis=0)
+    mean_deltas = np.mean(deltas[:train_size], axis=0)
+    std_deltas = np.std(deltas[:train_size], axis=0)
+    mean_deltadeltas = np.mean(deltadeltas[:train_size], axis=0)
+    std_deltadeltas = np.std(deltadeltas[:train_size], axis=0)
+
+    speech_features[:, :, :, 0] = (features[:, :, :] - mean_features) / (std_features + eps)
+    speech_features[:, :, :, 1] = (features[:, :, :] - mean_deltas) / (std_deltas + eps)
+    speech_features[:, :, :, 2] = (features[:, :, :] - mean_deltadeltas) / (std_deltadeltas + eps)
+    print("speech_features shape", speech_features.shape)
+
+    return speech_features
 
 
-def get_mocap(data2, data_type="improvised"):
+def get_mocap(data, data_type="improvised"):
     print("creating mocap data...")
     x_train_mocap = []
-    for ses_mod in data2:
+    for utterance in data:
         if data_type == "all":
-            x_head = ses_mod['mocap_head']
+            x_head = utterance['mocap_head']
             if (x_head.shape != (200, 18)):
                 x_head = np.zeros((200, 18))
             x_head[np.isnan(x_head)] = 0
-            x_hand = ses_mod['mocap_hand']
+            x_hand = utterance['mocap_hand']
             if (x_hand.shape != (200, 6)):
                 x_hand = np.zeros((200, 6))
             x_hand[np.isnan(x_hand)] = 0
-            x_rot = ses_mod['mocap_rot']
+            x_rot = utterance['mocap_rot']
             if (x_rot.shape != (200, 165)):
                 x_rot = np.zeros((200, 165))
             x_rot[np.isnan(x_rot)] = 0
@@ -370,16 +451,16 @@ def get_mocap(data2, data_type="improvised"):
             x_mocap = np.concatenate((x_mocap, x_rot), axis=1)
             x_train_mocap.append(x_mocap)
         elif data_type == "scripted":
-            if detect_acting_type(ses_mod) == "scripted":
-                x_head = ses_mod['mocap_head']
+            if detect_acting_type(utterance) == "scripted":
+                x_head = utterance['mocap_head']
                 if (x_head.shape != (200, 18)):
                     x_head = np.zeros((200, 18))
                 x_head[np.isnan(x_head)] = 0
-                x_hand = ses_mod['mocap_hand']
+                x_hand = utterance['mocap_hand']
                 if (x_hand.shape != (200, 6)):
                     x_hand = np.zeros((200, 6))
                 x_hand[np.isnan(x_hand)] = 0
-                x_rot = ses_mod['mocap_rot']
+                x_rot = utterance['mocap_rot']
                 if (x_rot.shape != (200, 165)):
                     x_rot = np.zeros((200, 165))
                 x_rot[np.isnan(x_rot)] = 0
@@ -387,16 +468,16 @@ def get_mocap(data2, data_type="improvised"):
                 x_mocap = np.concatenate((x_mocap, x_rot), axis=1)
                 x_train_mocap.append(x_mocap)
         elif data_type == "improvised":
-            if detect_acting_type(ses_mod) == "improvised":
-                x_head = ses_mod['mocap_head']
+            if detect_acting_type(utterance) == "improvised":
+                x_head = utterance['mocap_head']
                 if (x_head.shape != (200, 18)):
                     x_head = np.zeros((200, 18))
                 x_head[np.isnan(x_head)] = 0
-                x_hand = ses_mod['mocap_hand']
+                x_hand = utterance['mocap_hand']
                 if (x_hand.shape != (200, 6)):
                     x_hand = np.zeros((200, 6))
                 x_hand[np.isnan(x_hand)] = 0
-                x_rot = ses_mod['mocap_rot']
+                x_rot = utterance['mocap_rot']
                 if (x_rot.shape != (200, 165)):
                     x_rot = np.zeros((200, 165))
                 x_rot[np.isnan(x_rot)] = 0
@@ -411,18 +492,18 @@ def get_mocap(data2, data_type="improvised"):
     return x_train_mocap
 
 
-def get_label(data2, emotions_used, data_type="improvised"):
+def get_label(data, emotions_used, data_type="improvised"):
     print("creating labels...")
     Y = []
-    for ses_mod in data2:
+    for utterance in data:
         if data_type == "all":
-            Y.append(ses_mod['emotion'])
+            Y.append(utterance['emotion'])
         elif data_type == "scripted":
-            if detect_acting_type(ses_mod) == "scripted":
-                Y.append(ses_mod['emotion'])
+            if detect_acting_type(utterance) == "scripted":
+                Y.append(utterance['emotion'])
         elif data_type == "improvised":
-            if detect_acting_type(ses_mod) == "improvised":
-                Y.append(ses_mod['emotion'])
+            if detect_acting_type(utterance) == "improvised":
+                Y.append(utterance['emotion'])
 
     Y = label_binarize(Y, emotions_used)
 
@@ -434,36 +515,38 @@ def get_label(data2, emotions_used, data_type="improvised"):
 def feed_data(config):
     model_name = config['model'].split('.')[-1]
     emotions_used = np.array(config['emotion'])
-    train_val_test_split = np.array(config['train_val_test_split'])
-    split_seed = config['split_seed']
     code_path = os.path.dirname(os.path.realpath(os.getcwd()))
-    test_size = train_val_test_split[-1]
     data_type = config['data_type']
+    feature_type = config['feature_type']
+
 
     with open(code_path + '/HearYou2.0/datasets/data_collected.pickle', 'rb') as handle:
-        data2 = pickle.load(handle)
+        data = pickle.load(handle)
+
+    utterance_count_dict = count_utterance(data)
+    train_size, test_size = get_count(utterance_count_dict, data_type)
+
+    print("Training on", model_name)
+    print("Data type:", data_type)
+    print("Feature type:", feature_type)
+    print("Training data size:", train_size)
+    print("Testing data size:", test_size)
 
     if model_name == 'text_speech_mocap' or model_name == 'text_speech_mocap_attention':
-        print(model_name)
-        nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2, data_type=data_type)
-        x_train_speech, _, _ = get_speech_features(data2, data_type=data_type)
-        x_train_mocap = get_mocap(data2, data_type=data_type)
-        Y = get_label(data2, emotions_used, data_type=data_type)
+        nb_words, g_word_embedding_matrix, x_text = get_transcription(data, data_type=data_type)
+        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type)
+        x_mocap = get_mocap(data, data_type=data_type)
+        Y = get_label(data, emotions_used, data_type=data_type)
 
-        xtrain_sp, xtest_sp, ytrain, ytest= train_test_split(x_train_speech, Y,
-                                                                   test_size=test_size,
-                                                                   random_state=split_seed,
-                                                                   shuffle=True)
-
-        xtrain_tx, xtest_tx, _, _ = train_test_split(x_train_text, Y,
-                                                            test_size=test_size,
-                                                            random_state=split_seed,
-                                                            shuffle=True)
-
-        xtrain_mo, xtest_mo, _, _ = train_test_split(x_train_mocap, Y,
-                                                     test_size=test_size,
-                                                     random_state=split_seed,
-                                                     shuffle=True)
+        # train test split
+        xtrain_sp = x_speech[:train_size]
+        xtest_sp = x_speech[train_size:]
+        xtrain_tx = x_text[:train_size]
+        xtest_tx = x_text[train_size:]
+        xtrain_mo = x_mocap[:train_size]
+        xtest_mo = x_mocap[train_size:]
+        ytrain = Y[:train_size]
+        ytest= Y[train_size:]
 
         xtrain = [xtrain_tx, xtrain_sp, xtrain_mo]
         xtest = [xtest_tx, xtest_sp, xtest_mo]
@@ -471,19 +554,17 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
     if model_name == 'text_speech' or model_name == 'text_speech_attention':
-        nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2, data_type=data_type)
-        x_train_speech = get_speech_features(data2, data_type=data_type)
-        Y = get_label(data2, emotions_used, data_type=data_type)
+        nb_words, g_word_embedding_matrix, x_text = get_transcription(data, data_type=data_type)
+        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type)
+        Y = get_label(data, emotions_used, data_type=data_type)
 
-        xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(x_train_speech, Y,
-                                                               test_size=test_size,
-                                                               random_state=split_seed,
-                                                               shuffle=True)
-
-        xtrain_tx, xtest_tx, _, _ = train_test_split(x_train_text, Y,
-                                                     test_size=test_size,
-                                                     random_state=split_seed,
-                                                     shuffle=True)
+        # train test split
+        xtrain_sp = x_speech[:train_size]
+        xtest_sp = x_speech[train_size:]
+        xtrain_tx = x_text[:train_size]
+        xtest_tx = x_text[train_size:]
+        ytrain = Y[:train_size]
+        ytest = Y[train_size:]
 
         xtrain = [xtrain_tx, xtrain_sp]
         xtest = [xtest_tx, xtest_sp]
@@ -491,46 +572,29 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
     if model_name == 'text_lstm' or model_name == 'text_lstm_attention':
-        nb_words, g_word_embedding_matrix, x_train_text = get_transcription(data2, data_type=data_type)
-        Y = get_label(data2, emotions_used, data_type=data_type)
+        nb_words, g_word_embedding_matrix, x_text = get_transcription(data, data_type=data_type)
+        Y = get_label(data, emotions_used, data_type=data_type)
 
-        xtrain_tx, xtest_tx, ytrain, ytest = train_test_split(x_train_text, Y,
-                                                     test_size=test_size,
-                                                     random_state=split_seed,
-                                                     shuffle=True)
+        # train test split
+        xtrain_tx = x_text[:train_size]
+        xtest_tx = x_text[train_size:]
+        ytrain = Y[:train_size]
+        ytest = Y[train_size:]
 
         xtrain = xtrain_tx
         xtest = xtest_tx
 
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
-    if model_name == 'speech_delta':
-        x_train_speech, deltas, deltasdeltas = get_speech_features(data2, data_type=data_type)
-        xtrain = np.empty((2659, 100, 12, 3), dtype=np.float32)
-        xtrain[:, :, :, 0] = x_train_speech[:, :, 8:20]
-        xtrain[:, :, :, 1] = deltas[:, :, 8:20]
-        xtrain[:, :, :, 2] = deltasdeltas[:, :, 8:20]
+    if model_name == 'speech_dense' or model_name == 'speech_lstm' or model_name == 'speech_lstm_attention' or model_name == 'speech_delta':
+        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type)
+        Y = get_label(data, emotions_used, data_type=data_type)
 
-        Y = get_label(data2, emotions_used, data_type=data_type)
-
-        xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(xtrain, Y,
-                                                               test_size=test_size,
-                                                               random_state=split_seed,
-                                                               shuffle=True)
-
-        xtrain = xtrain_sp
-        xtest = xtest_sp
-
-        return xtrain, ytrain, xtest, ytest
-
-    if model_name == 'speech_dense' or model_name == 'speech_lstm' or model_name == 'speech_lstm_attention':
-        x_train_speech, _, _ = get_speech_features(data2, data_type=data_type)
-        Y = get_label(data2, emotions_used, data_type=data_type)
-
-        xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(x_train_speech, Y,
-                                                               test_size=test_size,
-                                                               random_state=split_seed,
-                                                               shuffle=True)
+        # train test split
+        xtrain_sp = x_speech[:train_size]
+        xtest_sp = x_speech[train_size:]
+        ytrain = Y[:train_size]
+        ytest = Y[train_size:]
 
         xtrain = xtrain_sp
         xtest = xtest_sp
@@ -538,18 +602,17 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest
 
     if model_name == 'speech_mocap' or model_name == 'speech_mocap_attention':
-        x_train_speech = get_speech_features(data2, data_type=data_type)
-        x_train_mocap = get_mocap(data2, data_type=data_type)
-        Y = get_label(data2, emotions_used, data_type=data_type)
+        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type)
+        x_mocap = get_mocap(data, data_type=data_type)
+        Y = get_label(data, emotions_used, data_type=data_type)
 
-        xtrain_sp, xtest_sp, ytrain, ytest = train_test_split(x_train_speech, Y,
-                                                               test_size=test_size,
-                                                               random_state=split_seed,
-                                                               shuffle=True)
-        xtrain_mo, xtest_mo, _, _ = train_test_split(x_train_mocap, Y,
-                                                     test_size=test_size,
-                                                     random_state=split_seed,
-                                                     shuffle=True)
+        # train test split
+        xtrain_sp = x_speech[:train_size]
+        xtest_sp = x_speech[train_size:]
+        xtrain_mo = x_mocap[:train_size]
+        xtest_mo = x_mocap[train_size:]
+        ytrain = Y[:train_size]
+        ytest = Y[train_size:]
 
         xtrain = [xtrain_sp, xtrain_mo]
         xtest = [xtest_sp, xtest_mo]
@@ -557,13 +620,14 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest
 
     if model_name == 'mocap_conv':
-        x_train_mocap = get_mocap(data2, data_type=data_type)
-        Y = get_label(data2, emotions_used, data_type=data_type)
+        x_mocap = get_mocap(data, data_type=data_type)
+        Y = get_label(data, emotions_used, data_type=data_type)
 
-        xtrain_mo, xtest_mo, ytrain, ytest = train_test_split(x_train_mocap, Y,
-                                                     test_size=test_size,
-                                                     random_state=split_seed,
-                                                     shuffle=True)
+        # train test split
+        xtrain_mo = x_mocap[:train_size]
+        xtest_mo = x_mocap[train_size:]
+        ytrain = Y[:train_size]
+        ytest = Y[train_size:]
 
         xtrain = xtrain_mo
         xtest = xtest_mo
@@ -571,14 +635,15 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest
 
     if model_name == 'mocap_lstm' or 'mocap_lstm_attention':
-        x_train_mocap = get_mocap(data2, data_type=data_type)
-        Y = get_label(data2, emotions_used, data_type=data_type)
+        x_mocap = get_mocap(data, data_type=data_type)
+        Y = get_label(data, emotions_used, data_type=data_type)
+        x_mocap = x_mocap.reshape(-1, 200, 189)
 
-        x_train_mocap = x_train_mocap.reshape(-1, 200, 189)
-        xtrain_mo, xtest_mo, ytrain, ytest = train_test_split(x_train_mocap, Y,
-                                                               test_size=test_size,
-                                                               random_state=split_seed,
-                                                               shuffle=True)
+        # train test split
+        xtrain_mo = x_mocap[:train_size]
+        xtest_mo = x_mocap[train_size:]
+        ytrain = Y[:train_size]
+        ytest = Y[train_size:]
 
         xtrain = xtrain_mo
         xtest = xtest_mo
@@ -615,17 +680,14 @@ def load_model(config):
 
 
 def train(config, model, xtrain, ytrain, xtest, ytest):
-    #print("xtrain", xtrain.shape)
-    #print("ytrain", ytrain.shape)
-    #print("xtest", xtest.shape)
-    #print("ytest", ytest.shape)
+
     epochs = config['epochs']
     batch_size = config['batch_size']
     model_name = config['model'].split('.')[-1]
     emotion_class = config['emotion']
-    validation_split = np.array(config['train_val_test_split'])[1] / \
-                       (np.array(config['train_val_test_split'])[1] +
-                        np.array(config['train_val_test_split'])[0])
+    validation_split = np.array(config['train_val_split'])[1] / \
+                       (np.array(config['train_val_split'])[1] +
+                        np.array(config['train_val_split'])[0])
 
     path_to_log = './logs/' + model_name
 

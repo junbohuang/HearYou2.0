@@ -1,7 +1,10 @@
-from keras.layers import Input, Conv2D, Dropout, Flatten, concatenate
-from keras.layers import BatchNormalization, Dense, Embedding, LSTM, Bidirectional
+from keras.layers import Input, Conv2D, Conv3D, Dropout, Flatten, Reshape, MaxPooling2D
+from keras.layers import BatchNormalization, Dense, Embedding, LSTM, Bidirectional, concatenate
 from keras.models import Model
+from keras.optimizers import Adam
 from metrics.top_k_accuracy import *
+from wrappers.attention import AttentionDecoder
+from tensorflow.python.keras import backend as K
 
 def load(nb_words, g_word_embedding_matrix):
 
@@ -54,6 +57,7 @@ def load(nb_words, g_word_embedding_matrix):
     model = Model(inputs=[text_input_layer, speech_input_layer, mocap_input_layer], outputs=output_layer)
 
     metrics = top_k_accuracy()
-    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=metrics)
+    adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False, clipnorm=3.0)
+    model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=metrics)
 
     return model
