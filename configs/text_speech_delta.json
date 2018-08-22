@@ -1,5 +1,5 @@
 {
-  "epochs": 20,
+  "epochs": 80,
   "batch_size": 32,
   "train_val_split": [0.85, 0.15],
   "model": "models.text_speech_attention",
