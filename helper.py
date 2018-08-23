@@ -721,7 +721,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
     print("class_weights_dict", class_weights_dict)
     # tensorboard = TensorBoard(log_dir=path_to_log, histogram_freq=1, write_graph=False, write_grads=False)
     # cm_logger = ConfusionMatrixPlotter(xtrain, ytrain, emotion_class, model_name)
-    lr_sched = step_decay_schedule(initial_lr=1e-4, decay_factor=0.75, step_size=2)
+    lr_sched = step_decay_schedule(initial_lr=1e-4, decay_factor=0.80, step_size=2)
 
     ## FOR SAVING MODEL
     save_path = os.path.join(path_to_log, model_name) + '.h5'
