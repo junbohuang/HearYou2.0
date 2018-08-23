@@ -25,21 +25,19 @@ run all configurations stored in *./configs* if *-c flag* is not given
 
 ## Results
 
-| data type         | Scripted| Improvised | Both |
+|data type(all feat)| Scripted| Improvised | Both |
 |:-----------------:|:-------:|:----------:|:----:|
 | text              | xx%     |    xx%     |  61% |
-| speech            | xx%     |    xx%     |  51% |
+| speech            | xx%     |    34%     |  51% |
 | mocap             | xx%     |    xx%     |  45% |
 | text+speech       | xx%     |    xx%     |  67% |
 | text+speech+mocap | xx%     |    xx%     |  70% |
 
-| feature type      | 34      | MFCC&DD    | 34&DD|
+|feature type(impro)| 34      | MFCC&DD    | 34&DD|
 |:-----------------:|:-------:|:----------:|:----:|
-| text              | xx%     |    xx%     |  xx% |
-| speech            | xx%     |    xx%     |  xx% |
-| mocap             | xx%     |    xx%     |  xx% |
-| text+speech       | xx%     |    xx%     |  xx% |
-| text+speech+mocap | xx%     |    xx%     |  xx% |
+| speech            | xx%     |    52%     |  34% |
+| text+speech       | xx%     |    55%     |  xx% |
+| text+speech+mocap | xx%     |    71%     |  xx% |
 
 
 ## References
