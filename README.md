@@ -35,9 +35,21 @@ run all configurations stored in *./configs* if *-c flag* is not given
 
 |feature type(impro)| 34      | MFCC&DD    | 34&DD|
 |:-----------------:|:-------:|:----------:|:----:|
-| speech            | xx%     |    52%     |  34% |
+| speech            | xx%     |    57%     |  xx% |
 | text+speech       | xx%     |    55%     |  xx% |
 | text+speech+mocap | xx%     |    71%     |  xx% |
+
+|feature type(scripted)| 34      | MFCC&DD    | 34&DD|
+|:-----------------:|:-------:|:----------:|:----:|
+| speech            | xx%     |    xx%     |  xx% |
+| text+speech       | xx%     |    xx%     |  xx% |
+| text+speech+mocap | xx%     |    xx%     |  xx% |
+
+|feature type(all)| 34      | MFCC&DD    | 34&DD|
+|:-----------------:|:-------:|:----------:|:----:|
+| speech            | xx%     |    xx%     |  xx% |
+| text+speech       | xx%     |    xx%     |  xx% |
+| text+speech+mocap | xx%     |    xx%     |  xx% |
 
 
 ## References

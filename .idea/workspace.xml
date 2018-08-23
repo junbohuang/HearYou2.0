@@ -3,12 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="167b6649-c8be-4b8d-a6ae-95b39f9de463" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/text_speech_mocap_attention.py" afterPath="$PROJECT_DIR$/models/text_speech_mocap_attention.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/speech_lstm_attention.py" afterPath="$PROJECT_DIR$/models/speech_lstm_attention.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/text_lstm_attention.py" afterPath="$PROJECT_DIR$/models/text_lstm_attention.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/text_speech_mocap_attention.py" afterPath="$PROJECT_DIR$/models/text_speech_mocap_attention.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/speech_mocap_attention.py" afterPath="$PROJECT_DIR$/models/speech_mocap_attention.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/text_speech_attention.py" afterPath="$PROJECT_DIR$/models/text_speech_attention.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/mocap_lstm_attention.py" afterPath="$PROJECT_DIR$/models/mocap_lstm_attention.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/speech_mocap_attention.py" afterPath="$PROJECT_DIR$/models/speech_mocap_attention.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/speech_lstm_attention.py" afterPath="$PROJECT_DIR$/models/speech_lstm_attention.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,8 +23,8 @@
       <file leaf-file-name="helper.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/helper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-725">
-              <caret line="23" column="80" lean-forward="false" selection-start-line="23" selection-start-column="80" selection-end-line="23" selection-end-column="80" />
+            <state relative-caret-position="769">
+              <caret line="563" column="0" lean-forward="false" selection-start-line="563" selection-start-column="0" selection-end-line="563" selection-end-column="0" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -35,18 +35,8 @@
       <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="630">
-              <caret line="42" column="0" lean-forward="true" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="train.sge" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/train.sge">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="24" column="7" lean-forward="false" selection-start-line="24" selection-start-column="7" selection-end-line="24" selection-end-column="7" />
+            <state relative-caret-position="555">
+              <caret line="37" column="48" lean-forward="false" selection-start-line="37" selection-start-column="48" selection-end-line="37" selection-end-column="48" />
               <folding />
             </state>
           </provider>
@@ -59,10 +49,10 @@
               <caret line="44" column="15" lean-forward="false" selection-start-line="44" selection-start-column="15" selection-end-line="44" selection-end-column="15" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
-                <marker date="1534976225890" expanded="true" signature="152:1005" ph="..." />
-                <marker date="1534976225890" expanded="true" signature="518:1005" ph="..." />
-                <marker date="1534976225890" expanded="true" signature="586:1005" ph="..." />
-                <marker date="1534976225890" expanded="true" signature="655:1005" ph="..." />
+                <marker date="1535027808590" expanded="true" signature="152:1005" ph="..." />
+                <marker date="1535027808590" expanded="true" signature="518:1005" ph="..." />
+                <marker date="1535027808590" expanded="true" signature="586:1005" ph="..." />
+                <marker date="1535027808590" expanded="true" signature="655:1005" ph="..." />
               </folding>
             </state>
           </provider>
@@ -79,7 +69,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>K.</find>
       <find>keras.</find>
       <find>class_weight</find>
       <find>plot_cm</find>
@@ -109,6 +98,7 @@
       <find>load_model</find>
       <find>name</find>
       <find>feed_data</find>
+      <find>feed_data(</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -511,7 +501,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/train_gpu.py" />
     <entry file="file://$PROJECT_DIR$/metrics/top_k_accuracy.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -724,10 +713,10 @@
           <caret line="44" column="15" lean-forward="false" selection-start-line="44" selection-start-column="15" selection-end-line="44" selection-end-column="15" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
-            <marker date="1534976225890" expanded="true" signature="152:1005" ph="..." />
-            <marker date="1534976225890" expanded="true" signature="518:1005" ph="..." />
-            <marker date="1534976225890" expanded="true" signature="586:1005" ph="..." />
-            <marker date="1534976225890" expanded="true" signature="655:1005" ph="..." />
+            <marker date="1535027808590" expanded="true" signature="152:1005" ph="..." />
+            <marker date="1535027808590" expanded="true" signature="518:1005" ph="..." />
+            <marker date="1535027808590" expanded="true" signature="586:1005" ph="..." />
+            <marker date="1535027808590" expanded="true" signature="655:1005" ph="..." />
           </folding>
         </state>
       </provider>
@@ -768,8 +757,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/helper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-725">
-          <caret line="23" column="80" lean-forward="false" selection-start-line="23" selection-start-column="80" selection-end-line="23" selection-end-column="80" />
+        <state relative-caret-position="769">
+          <caret line="563" column="0" lean-forward="false" selection-start-line="563" selection-start-column="0" selection-end-line="563" selection-end-column="0" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -787,7 +776,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="15" column="45" lean-forward="true" selection-start-line="15" selection-start-column="45" selection-end-line="15" selection-end-column="45" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -816,6 +804,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="586">
           <caret line="49" column="23" lean-forward="false" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="555">
+          <caret line="37" column="48" lean-forward="false" selection-start-line="37" selection-start-column="48" selection-end-line="37" selection-end-column="48" />
+          <folding />
         </state>
       </provider>
     </entry>
