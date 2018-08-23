@@ -532,7 +532,7 @@ def feed_data(config):
     print("Training data size:", train_size)
     print("Testing data size:", test_size)
 
-    if model_name == 'text_speech_mocap' or model_name == 'text_speech_mocap_attention':
+    if model_name == 'text_speech_mocap' or model_name == 'text_speech_mocap_delta':
         nb_words, g_word_embedding_matrix, x_text = get_transcription(data, data_type=data_type)
         x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type)
         x_mocap = get_mocap(data, data_type=data_type)
@@ -553,7 +553,7 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
-    if model_name == 'text_speech' or model_name == 'text_speech_attention':
+    if model_name == 'text_speech' or model_name == 'text_speech_delta':
         nb_words, g_word_embedding_matrix, x_text = get_transcription(data, data_type=data_type)
         x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type)
         Y = get_label(data, emotions_used, data_type=data_type)
@@ -601,7 +601,7 @@ def feed_data(config):
 
         return xtrain, ytrain, xtest, ytest
 
-    if model_name == 'speech_mocap' or model_name == 'speech_mocap_attention':
+    if model_name == 'speech_mocap_delta':
         x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type)
         x_mocap = get_mocap(data, data_type=data_type)
         Y = get_label(data, emotions_used, data_type=data_type)
