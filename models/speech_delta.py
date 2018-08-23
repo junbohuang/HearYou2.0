@@ -8,10 +8,10 @@ from tensorflow.python.keras import backend as K
 
 
 
-def load():
+def load(feat_size):
 
 
-    input_layer = Input(shape=(100, 12, 3))
+    input_layer = Input(shape=(100, feat_size, 3))
     layer = input_layer
 
     layer = Conv2D(128, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)

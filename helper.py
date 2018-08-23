@@ -664,16 +664,20 @@ def load_model(config):
     if not os.path.exists(path_to_log):
         os.makedirs(path_to_log)
 
+    if config["feature_type"] == "mfcc":
+        feat_size = 12
+    elif config["feature_type"] == "all":
+        feat_size = 36
     module_model = config['model']
     print("model:", module_model)
     module = importlib.import_module(module_model)
     if 'text' in module_model:
         xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix = feed_data(config)
-        model = module.load(nb_words, g_word_embedding_matrix)
+        model = module.load(nb_words, g_word_embedding_matrix, feat_size)
     else:
         print(config)
         xtrain, ytrain, xtest, ytest = feed_data(config)
-        model = module.load()
+        model = module.load(feat_size)
 
 
     return model, xtrain, ytrain, xtest, ytest
