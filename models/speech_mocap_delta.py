@@ -60,7 +60,7 @@ def load(feat_size):
     model = Model(inputs=[speech_input_layer, mocap_input_layer], outputs=output_layer)
 
     metrics = top_k_accuracy()
-    adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0, amsgrad=False, clipnorm=3.0)
+    adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=1e-6, amsgrad=False, clipnorm=3.0)
     model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=metrics)
 
     return model
