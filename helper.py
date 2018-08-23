@@ -4,7 +4,7 @@ import importlib
 import pickle
 
 import tensorflow as tf
-from tensorflow.python.keras.callbacks import History, TensorBoard, ModelCheckpoint, CSVLogger
+from tensorflow.python.keras.callbacks import History, TensorBoard, ModelCheckpoint, CSVLogger, LearningRateScheduler
 from tensorflow.python import debug as tf_debug
 
 from keras.preprocessing.text import Tokenizer
@@ -682,6 +682,11 @@ def load_model(config):
 
     return model, xtrain, ytrain, xtest, ytest
 
+def exp_decay(epoch):
+   initial_lrate = 0.01
+   k = 0.1
+   lrate = initial_lrate * np.exp(-k*t)
+   return lrate
 
 def train(config, model, xtrain, ytrain, xtest, ytest):
 
@@ -709,6 +714,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
     print("class_weights_dict", class_weights_dict)
     # tensorboard = TensorBoard(log_dir=path_to_log, histogram_freq=1, write_graph=False, write_grads=False)
     # cm_logger = ConfusionMatrixPlotter(xtrain, ytrain, emotion_class, model_name)
+    lrate = LearningRateScheduler(exp_decay)
 
     ## FOR SAVING MODEL
     save_path = os.path.join(path_to_log, model_name) + '.h5'
@@ -721,7 +727,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
         model.fit(xtrain, ytrain,
                     batch_size=batch_size, epochs=epochs, verbose=1,
                     validation_split=validation_split, shuffle=True,
-                    callbacks=[csv_logger, accloss_logger],
+                    callbacks=[csv_logger, accloss_logger, lrate],
                     class_weight=class_weights_dict)
         print("trained. saving model...")
         model.save_weights(save_path)
