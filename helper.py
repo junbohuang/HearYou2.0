@@ -682,11 +682,18 @@ def load_model(config):
 
     return model, xtrain, ytrain, xtest, ytest
 
-def exp_decay(epoch):
-   initial_lrate = 0.01
-   k = 0.1
-   lrate = initial_lrate * np.exp(-k*t)
-   return lrate
+
+def step_decay_schedule(initial_lr=1e-3, decay_factor=0.75, step_size=10):
+    '''
+    Wrapper function to create a LearningRateScheduler with step decay schedule.
+    '''
+
+    def schedule(epoch):
+        return initial_lr * (decay_factor ** np.floor(epoch / step_size))
+
+    return LearningRateScheduler(schedule)
+
+
 
 def train(config, model, xtrain, ytrain, xtest, ytest):
 
@@ -714,7 +721,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
     print("class_weights_dict", class_weights_dict)
     # tensorboard = TensorBoard(log_dir=path_to_log, histogram_freq=1, write_graph=False, write_grads=False)
     # cm_logger = ConfusionMatrixPlotter(xtrain, ytrain, emotion_class, model_name)
-    lrate = LearningRateScheduler(exp_decay)
+    lr_sched = step_decay_schedule(initial_lr=1e-4, decay_factor=0.75, step_size=10)
 
     ## FOR SAVING MODEL
     save_path = os.path.join(path_to_log, model_name) + '.h5'
@@ -727,7 +734,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
         model.fit(xtrain, ytrain,
                     batch_size=batch_size, epochs=epochs, verbose=1,
                     validation_split=validation_split, shuffle=True,
-                    callbacks=[csv_logger, accloss_logger, lrate],
+                    callbacks=[csv_logger, accloss_logger, lr_sched],
                     class_weight=class_weights_dict)
         print("trained. saving model...")
         model.save_weights(save_path)
