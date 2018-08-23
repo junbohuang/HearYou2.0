@@ -1,0 +1,36 @@
+*** Start of SGE job ***
+Thu Aug 23 14:28:28 CEST 2018
+
+Hostname
+voxel.cv.uni-osnabrueck.de
+442870
+Job-ID:
+442870
+user:
+juhuang
+
+Start
+
+CUDA VERSION (should be 9):
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2017 NVIDIA Corporation
+Built on Fri_Sep__1_21:08:03_CDT_2017
+Cuda compilation tools, release 9.0, V9.0.176
+ROOT
+/net/store/scratch/even/valid_until_31_aug_2018/pimv
+rolling...
+2018-08-23 14:33:24.379384: I tensorflow/core/platform/cpu_feature_guard.cc:140] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2018-08-23 14:33:24.910512: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1356] Found device 0 with properties: 
+name: GeForce GTX TITAN X major: 5 minor: 2 memoryClockRate(GHz): 1.076
+pciBusID: 0000:03:00.0
+totalMemory: 11.92GiB freeMemory: 11.81GiB
+2018-08-23 14:33:24.910540: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
+2018-08-23 14:33:25.057134: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
+2018-08-23 14:33:25.057169: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0 
+2018-08-23 14:33:25.057175: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N 
+2018-08-23 14:33:25.057400: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11434 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:03:00.0, compute capability: 5.2)
+2018-08-23 14:33:28.817652: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
+2018-08-23 14:33:28.817697: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
+2018-08-23 14:33:28.817705: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0 
+2018-08-23 14:33:28.817710: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N 
+2018-08-23 14:33:28.817832: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 11434 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN X, pci bus id: 0000:03:00.0, compute capability: 5.2)
