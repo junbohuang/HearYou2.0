@@ -37,7 +37,7 @@ run all configurations stored in *./configs* if *-c flag* is not given
 |:-----------------:|:-------:|:----------:|:----:|
 | speech            | xx%     |    57%     |  xx% |
 | text+speech       | xx%     |    55%     |  xx% |
-| text+speech+mocap | xx%     |    71%     |  xx% |
+| text+speech+mocap | xx%     |    76%     |  xx% |
 
 |feature type(scripted)| 34      | MFCC&DD    | 34&DD|
 |:-----------------:|:-------:|:----------:|:----:|
