@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="167b6649-c8be-4b8d-a6ae-95b39f9de463" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helper.py" afterPath="$PROJECT_DIR$/helper.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/speech_delta.py" afterPath="$PROJECT_DIR$/models/speech_delta.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/speech_mocap_attention.py" afterPath="$PROJECT_DIR$/models/speech_mocap_attention.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/text_speech_attention.py" afterPath="$PROJECT_DIR$/models/text_speech_attention.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/text_speech_mocap_attention.py" afterPath="$PROJECT_DIR$/models/text_speech_mocap_attention.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,8 +17,8 @@
       <file leaf-file-name="helper.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/helper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-191">
-              <caret line="679" column="38" lean-forward="true" selection-start-line="679" selection-start-column="38" selection-end-line="679" selection-end-column="38" />
+            <state relative-caret-position="471">
+              <caret line="729" column="64" lean-forward="false" selection-start-line="729" selection-start-column="64" selection-end-line="729" selection-end-column="64" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -53,8 +49,8 @@
       <file leaf-file-name="speech_delta.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/speech_delta.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="10" column="18" lean-forward="false" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
+            <state relative-caret-position="600">
+              <caret line="46" column="43" lean-forward="false" selection-start-line="46" selection-start-column="43" selection-end-line="46" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -64,7 +60,7 @@
         <entry file="file://$PROJECT_DIR$/models/speech_lstm_attention.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="105">
-              <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+              <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -149,7 +145,6 @@
       <find>train(</find>
       <find>split</find>
       <find>get_label(</find>
-      <find>feed_data(</find>
       <find>train_test_split(</find>
       <find>get_transcriptions</find>
       <find>get_speech_features</find>
@@ -163,6 +158,7 @@
       <find>load(</find>
       <find>&quot;all&quot;</find>
       <find>feat_</find>
+      <find>feed_data(</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -219,8 +215,8 @@
         <option value="$PROJECT_DIR$/configs/text_speech_delta.json" />
         <option value="$PROJECT_DIR$/models/text_speech_attention.py" />
         <option value="$PROJECT_DIR$/models/text_speech_mocap_attention.py" />
-        <option value="$PROJECT_DIR$/models/speech_delta.py" />
         <option value="$PROJECT_DIR$/models/speech_mocap_attention.py" />
+        <option value="$PROJECT_DIR$/models/speech_delta.py" />
         <option value="$PROJECT_DIR$/helper.py" />
       </list>
     </option>
@@ -850,18 +846,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/speech_delta.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="10" column="18" lean-forward="false" selection-start-line="10" selection-start-column="18" selection-end-line="10" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/speech_lstm_attention.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
-          <caret line="11" column="0" lean-forward="true" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+          <caret line="11" column="0" lean-forward="false" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -898,10 +886,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/models/speech_delta.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="46" column="43" lean-forward="false" selection-start-line="46" selection-start-column="43" selection-end-line="46" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/helper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-191">
-          <caret line="679" column="38" lean-forward="true" selection-start-line="679" selection-start-column="38" selection-end-line="679" selection-end-column="38" />
+        <state relative-caret-position="471">
+          <caret line="729" column="64" lean-forward="false" selection-start-line="729" selection-start-column="64" selection-end-line="729" selection-end-column="64" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
