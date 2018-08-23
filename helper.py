@@ -667,7 +667,7 @@ def load_model(config):
     if config["feature_type"] == "mfcc":
         feat_size = 12
     elif config["feature_type"] == "all":
-        feat_size = 36
+        feat_size = 34
     module_model = config['model']
     print("model:", module_model)
     module = importlib.import_module(module_model)

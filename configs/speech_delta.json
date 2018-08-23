@@ -1,5 +1,5 @@
 {
-  "epochs": 80,
+  "epochs": 30,
   "batch_size": 32,
   "train_val_split": [0.85, 0.15],
   "model": "models.speech_delta",
