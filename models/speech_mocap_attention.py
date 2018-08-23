@@ -6,9 +6,9 @@ from metrics.top_k_accuracy import *
 from wrappers.attention import AttentionDecoder
 from tensorflow.python.keras import backend as K
 
-def load():
+def load(feat_size):
 
-    speech_input_layer = Input(shape=(100, 12, 3))
+    speech_input_layer = Input(shape=(100, feat_size, 3))
     speech_layer = speech_input_layer
 
     speech_layer = Conv2D(128, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(speech_layer)

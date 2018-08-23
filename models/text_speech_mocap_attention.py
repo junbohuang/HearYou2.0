@@ -7,7 +7,7 @@ from wrappers.attention import AttentionDecoder
 from tensorflow.python.keras import backend as K
 
 
-def load(nb_words, g_word_embedding_matrix):
+def load(nb_words, g_word_embedding_matrix, feat_size):
 
 
     text_input_layer = Input(shape=(500,))
@@ -25,7 +25,7 @@ def load(nb_words, g_word_embedding_matrix):
     text_layer = Flatten()(text_layer)
     text_layer = Dense(256, activation='relu')(text_layer)
 
-    speech_input_layer = Input(shape=(100, 12, 3))
+    speech_input_layer = Input(shape=(100, feat_size, 3))
     speech_layer = speech_input_layer
 
     speech_layer = Conv2D(128, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(speech_layer)
