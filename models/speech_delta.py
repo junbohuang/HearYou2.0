@@ -15,21 +15,16 @@ def load(feat_size):
     layer = input_layer
 
     layer = Conv2D(128, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
-    #layer = BatchNormalization()(layer)
     layer = MaxPooling2D(padding='same')(layer)
     layer = Dropout(0.2)(layer)
     layer = Conv2D(256, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
-    #layer = BatchNormalization()(layer)
     layer = Dropout(0.2)(layer)
     layer = Conv2D(256, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
-    #layer = BatchNormalization()(layer)
     layer = Dropout(0.2)(layer)
-    #layer = Conv2D(256, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
-    #layer = BatchNormalization()(layer)
-    #layer = Dropout(0.2)(layer)
-    #layer = Conv2D(256, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
-    #layer = BatchNormalization()(layer)
-    #layer = Dropout(0.2)(layer)
+    layer = Conv2D(256, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
+    layer = Dropout(0.2)(layer)
+    layer = Conv2D(256, kernel_size=(5, 3), strides=(1, 1), padding='same', activation='relu')(layer)
+    layer = Dropout(0.2)(layer)
     layer = Dense(512, activation="relu")(layer)
     layer = BatchNormalization()(layer)
     layer = Reshape((100, -1))(layer)
@@ -47,7 +42,7 @@ def load(feat_size):
     model = Model(inputs=input_layer, outputs=output_layer)
 
     metrics = top_k_accuracy()
-    adam = Adam(lr=0.0001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.01, amsgrad=False, clipnorm=3.0)
+    adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0, amsgrad=False, clipnorm=3.0)
     model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=metrics)
 
     return model
