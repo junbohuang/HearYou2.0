@@ -24,7 +24,7 @@ python HearYou2.0.py -c configs/<model_to_run>.json
 run all configurations stored in *./configs* if *-c flag* is not given
 
 ## Results
-
+### static speech feature
 |data type(all feat)| Scripted| Improvised | Both |
 |:-----------------:|:-------:|:----------:|:----:|
 | text              | xx%     |    xx%     |  61% |
@@ -33,29 +33,30 @@ run all configurations stored in *./configs* if *-c flag* is not given
 | text+speech       | xx%     |    xx%     |  67% |
 | text+speech+mocap | xx%     |    xx%     |  70% |
 
+### dynamic speech feature (with 1st/2nd derivative)
 ### improvised data
-|feature type     | 34      | MFCC&DD    | 34&DD|
-|:-----------------:|:-------:|:----------:|:----:|
-| speech            | xx%     |    57%     |  51% |
-| speech+mocap      | xx%     |    73%     |  xx% |
-| text+speech       | xx%     |    55%     |  xx% |
-| text+speech+mocap | xx%     |    76%     |  xx% |
+|feature type     | MFCC&DD    | 34&DD|
+|:-----------------:|:----------:|:----:|
+| speech            |    57%     |  51% |
+| speech+mocap      |    73%     |  xx% |
+| text+speech       |    55%     |  xx% |
+| text+speech+mocap |    76%     |  xx% |
 
 ### scripted data
-|feature type    | 34      | MFCC&DD    | 34&DD|
-|:-----------------:|:-------:|:----------:|:----:|
-| speech            | xx%     |    53%     |  xx% |
-| speech+mocap      | xx%     |    41%     |  xx% |
-| text+speech       | xx%     |    xx%     |  xx% |
-| text+speech+mocap | xx%     |    25%     |  xx% |
+|feature type    | MFCC&DD    | 34&DD|
+|:-----------------:|:----------:|:----:|
+| speech            |    53%     |  xx% |
+| speech+mocap      |    41%     |  xx% |
+| text+speech       |    xx%     |  xx% |
+| text+speech+mocap |    25%     |  xx% |
 
 ### complete data
-|feature type      | 34      | MFCC&DD    | 34&DD|
-|:-----------------:|:-------:|:----------:|:----:|
-| speech            | xx%     |    xx%     |  xx% |
-| speech+mocap      | xx%     |    xx%     |  xx% |
-| text+speech       | xx%     |    50%     |  xx% |
-| text+speech+mocap | xx%     |    xx%     |  xx% |
+|feature type      | MFCC&DD    | 34&DD|
+|:-----------------:|:----------:|:----:|
+| speech            |    xx%     |  xx% |
+| speech+mocap      |    xx%     |  xx% |
+| text+speech       |    50%     |  xx% |
+| text+speech+mocap |    xx%     |  xx% |
 
 
 ## References
