@@ -33,22 +33,28 @@ run all configurations stored in *./configs* if *-c flag* is not given
 | text+speech       | xx%     |    xx%     |  67% |
 | text+speech+mocap | xx%     |    xx%     |  70% |
 
-|feature type(impro)| 34      | MFCC&DD    | 34&DD|
+### improvised data
+|feature type     | 34      | MFCC&DD    | 34&DD|
 |:-----------------:|:-------:|:----------:|:----:|
-| speech            | xx%     |    57%     |  xx% |
+| speech            | xx%     |    57%     |  51% |
+| speech+mocap      | xx%     |    73%     |  xx% |
 | text+speech       | xx%     |    55%     |  xx% |
 | text+speech+mocap | xx%     |    76%     |  xx% |
 
-|feature type(scripted)| 34      | MFCC&DD    | 34&DD|
+### scripted data
+|feature type    | 34      | MFCC&DD    | 34&DD|
 |:-----------------:|:-------:|:----------:|:----:|
-| speech            | xx%     |    xx%     |  xx% |
+| speech            | xx%     |    53%     |  xx% |
+| speech+mocap      | xx%     |    41%     |  xx% |
 | text+speech       | xx%     |    xx%     |  xx% |
-| text+speech+mocap | xx%     |    xx%     |  xx% |
+| text+speech+mocap | xx%     |    25%     |  xx% |
 
-|feature type(all)| 34      | MFCC&DD    | 34&DD|
+### complete data
+|feature type      | 34      | MFCC&DD    | 34&DD|
 |:-----------------:|:-------:|:----------:|:----:|
 | speech            | xx%     |    xx%     |  xx% |
-| text+speech       | xx%     |    xx%     |  xx% |
+| speech+mocap      | xx%     |    xx%     |  xx% |
+| text+speech       | xx%     |    50%     |  xx% |
 | text+speech+mocap | xx%     |    xx%     |  xx% |
 
 
