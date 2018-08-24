@@ -4,6 +4,6 @@
   "train_val_split": [0.85, 0.15],
   "model": "models.text_speech_delta",
   "emotion": ["ang", "exc", "neu", "sad"],
-  "data_type": "all",
+  "data_type": "scripted",
   "feature_type": "mfcc"
 }
