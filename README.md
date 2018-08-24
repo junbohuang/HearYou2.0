@@ -35,7 +35,7 @@ run all configurations stored in *./configs* if *-c flag* is not given
 
 ### dynamic speech feature (with 1st/2nd derivative)
 ### improvised data
-|feature type     | MFCC&DD    | 34&DD|
+|feature type       | MFCC       | 34   |
 |:-----------------:|:----------:|:----:|
 | speech            |    57%     |  51% |
 | speech+mocap      |    73%     |  xx% |
@@ -43,20 +43,20 @@ run all configurations stored in *./configs* if *-c flag* is not given
 | text+speech+mocap |    76%     |  xx% |
 
 ### scripted data
-|feature type    | MFCC&DD    | 34&DD|
+|feature type       | MFCC       | 34   |
 |:-----------------:|:----------:|:----:|
 | speech            |    53%     |  xx% |
 | speech+mocap      |    41%     |  xx% |
-| text+speech       |    xx%     |  xx% |
+| text+speech       |    43%     |  xx% |
 | text+speech+mocap |    25%     |  xx% |
 
 ### complete data
-|feature type      | MFCC&DD    | 34&DD|
+|feature type       | MFCC       | 34   |
 |:-----------------:|:----------:|:----:|
-| speech            |    xx%     |  xx% |
-| speech+mocap      |    xx%     |  xx% |
+| speech            |    50%     |  xx% |
+| speech+mocap      |    61%     |  xx% |
 | text+speech       |    50%     |  xx% |
-| text+speech+mocap |    xx%     |  xx% |
+| text+speech+mocap |    60%     |  xx% |
 
 
 ## References
