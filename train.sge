@@ -1,5 +1,5 @@
 #!/bin/bash
-#$ -N tx_sp_impro_mfcc
+#$ -N tx_sp_scripted_mfcc
 #$ -l mem=32G
 #$ -cwd
 #$ -l cuda=1

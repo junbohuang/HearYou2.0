@@ -1822,3 +1822,22 @@ Epoch 30/30
 1600/1728 [==========================>...] - ETA: 3s - loss: 0.6083 - acc: 0.7094 - Top2Acc: 0.9431 - Top3Acc: 0.9931
 1632/1728 [===========================>..] - ETA: 2s - loss: 0.6085 - acc: 0.7077 - Top2Acc: 0.9418 - Top3Acc: 0.9933
 1664/1728 [===========================>..] - ETA: 1s - loss: 0.6085 - acc: 0.7067 - Top2Acc: 0.9423 - Top3Acc: 0.9934
+1696/1728 [============================>.] - ETA: 0s - loss: 0.6081 - acc: 0.7081 - Top2Acc: 0.9428 - Top3Acc: 0.9929
+1728/1728 [==============================] - 50s 29ms/step - loss: 0.6108 - acc: 0.7078 - Top2Acc: 0.9433 - Top3Acc: 0.9931 - val_loss: 2.4316 - val_acc: 0.5425 - val_Top2Acc: 0.7353 - val_Top3Acc: 0.8366
+/net/store/scratch/even/valid_until_31_aug_2018/pimv/miniconda/envs/pimv/lib/python3.6/importlib/_bootstrap.py:219: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+Using TensorFlow backend.
+trained. saving model...
+Saved model to disk
+evaluating...
+loss: 0.733
+acc: 76.00%
+Top2Acc: 92.80%
+Top3Acc: 97.60%
+predicting...
+confusion matrix saved!
+The Mist is full of Mischief
+/var/spool/gridengine/execd/vector/job_scripts/442873: line 44: 12182 Segmentation fault      (core dumped) PYTHONPATH=$PIMV_ROOT/$USER WALLTIME=12:00:00 python main.py -c configs/speech_mocap_delta.json
+
+Thu Aug 23 18:02:29 CEST 2018
+*** End of SGE job ***
