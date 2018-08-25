@@ -1,5 +1,5 @@
 #!/bin/bash
-#$ -N sp_all_all
+#$ -N sp_improvised_all
 #$ -l mem=32G
 #$ -cwd
 #$ -l cuda=1
