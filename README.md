@@ -38,17 +38,17 @@ run all configurations stored in *./configs* if *-c flag* is not given
 |feature type       | MFCC       | 34   |
 |:-----------------:|:----------:|:----:|
 | speech            |    57%     |  51% |
-| speech+mocap      |    73%     |  xx% |
-| text+speech       |    55%     |  xx% |
-| text+speech+mocap |    76%     |  xx% |
+| speech+mocap      |    73%     |  74% |
+| text+speech       |    55%     |  50% |
+| text+speech+mocap |    76%     |  69% |
 
 ### scripted data
 |feature type       | MFCC       | 34   |
 |:-----------------:|:----------:|:----:|
-| speech            |    53%     |  xx% |
-| speech+mocap      |    41%     |  xx% |
-| text+speech       |    43%     |  xx% |
-| text+speech+mocap |    25%     |  xx% |
+| speech            |    53%     |  51% |
+| speech+mocap      |    41%     |  47% |
+| text+speech       |    43%     |  51% |
+| text+speech+mocap |    25%     |  38% |
 
 ### complete data
 |feature type       | MFCC       | 34   |
