@@ -53,10 +53,10 @@ run all configurations stored in *./configs* if *-c flag* is not given
 ### complete data
 |feature type       | MFCC       | 34   |
 |:-----------------:|:----------:|:----:|
-| speech            |    50%     |  xx% |
-| speech+mocap      |    61%     |  xx% |
-| text+speech       |    50%     |  xx% |
-| text+speech+mocap |    60%     |  xx% |
+| speech            |    50%     |  50% |
+| speech+mocap      |    61%     |  52% |
+| text+speech       |    50%     |  52% |
+| text+speech+mocap |    60%     |  50% |
 
 
 ## References
