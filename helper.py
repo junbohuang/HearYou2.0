@@ -701,13 +701,16 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
     batch_size = config['batch_size']
     model_name = config['model'].split('.')[-1]
     emotion_class = config['emotion']
+    data_type = config['data_type']
+    feature_type = config['feature_type']
+
     validation_split = np.array(config['train_val_split'])[1] / \
                        (np.array(config['train_val_split'])[1] +
                         np.array(config['train_val_split'])[0])
 
     path_to_log = './logs/' + model_name
 
-    csv_name = path_to_log + '/' + model_name + '.log'
+    csv_name = path_to_log + '/' + model_name + '_' + data_type + '_' + feature_type + '.log'
     csv_logger = CSVLogger(csv_name)
 
     accloss_logger = AccLossPlotter(model_name)
@@ -724,7 +727,8 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
     lr_sched = step_decay_schedule(initial_lr=1e-4, decay_factor=0.80, step_size=2)
 
     ## FOR SAVING MODEL
-    save_path = os.path.join(path_to_log, model_name) + '.h5'
+    h5_name =  model_name + '_' + data_type + '_' + feature_type + '.h5'
+    save_path = os.path.join(path_to_log, h5_name)
     # check_pointer = ModelCheckpoint(save_path, save_best_only=True)
 
 
@@ -750,7 +754,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
 
         print("predicting...")
         prediction = model.predict(xtest, verbose=0)
-        plot_cm(model_name, emotion_class, ytest, prediction)
+        plot_cm(model_name, emotion_class, ytest, prediction, data_type, feature_type)
         print("confusion matrix saved!")
 
     return model

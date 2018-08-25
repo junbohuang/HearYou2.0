@@ -38,7 +38,7 @@ def plot_confusion_matrix(cm, classes,
     plt.xlabel('Predicted label')
 
 
-def plot_cm(model_name, emotions_used, Y, prediction):
+def plot_cm(model_name, emotions_used, Y, prediction, data_type, feature_type):
 
     y_pred = prediction.argmax(1)
     y_true = Y.argmax(1)
@@ -46,6 +46,7 @@ def plot_cm(model_name, emotions_used, Y, prediction):
     # confusion matrix
     cnf_matrix = confusion_matrix(y_true, y_pred, labels=[0, 1, 2, 3])
     np.set_printoptions(precision=2)
+    print(cnf_matrix)
 
     # Plot non-normalized confusion matrix
     path_to_cm = './plots/' + model_name
@@ -53,12 +54,13 @@ def plot_cm(model_name, emotions_used, Y, prediction):
     plt.figure()
     plot_confusion_matrix(cnf_matrix, classes=emotions_used,
                           title='Confusion Matrix')
-    plt.savefig(path_to_cm + "/confusion_matrix_non_normalized.png")
+    cm_name = "/cm_" + model_name + "_" + data_type + "_" + feature_type + '.png'
+    plt.savefig(path_to_cm + cm_name)
 
     # Plot normalized confusion matrix
     plt.figure()
     plot_confusion_matrix(cnf_matrix, classes=emotions_used, normalize=True,
                           title='Normalized Confusion Matrix')
-
-    plt.savefig(path_to_cm + "/confusion_matrix_normalized.png")
+    cm_name = "/Normalized_cm_" + model_name + "_" + data_type + "_" + feature_type + '.png'
+    plt.savefig(path_to_cm + cm_name)
     plt.close()
