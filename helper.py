@@ -319,7 +319,7 @@ def calculate_features(frames, freq, options):
         return deriv_st_f
 
 
-def get_speech_features(data, data_type="improvised", feature_type="mfcc"):
+def get_speech_features(data, data_type="improvised", feature_type="mfcc", mode="dynamic"):
     framerate = 16000
     eps = 1e-5
     print("creating features for speech...")
@@ -342,33 +342,16 @@ def get_speech_features(data, data_type="improvised", feature_type="mfcc"):
     else:
         raise NotImplementedError(feature_type + "is beyond us...")
 
-    features = []
-    deltas = []
-    deltadeltas = []
-    speech_features = np.zeros((train_size + test_size, 100, feature_size, 3))
+    if mode == "dynamic":
+        features = []
+        deltas = []
+        deltadeltas = []
+        speech_features = np.zeros((train_size + test_size, 100, feature_size, 3))
 
-    counter = 0
+        counter = 0
 
-    for utterance in data:
-        if data_type == "all":
-            x_head = utterance['signal']
-            st_features = calculate_features(x_head, framerate, None)
-            delta = stDelta(st_features, 2)
-            deltadelta = stDelta(delta, 2)
-            st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
-            delta, _ = pad_sequence_into_array(delta, maxlen=100)
-            deltadelta, _ = pad_sequence_into_array(deltadelta, maxlen=100)
-            features.append(st_features.T)
-            deltas.append(delta.T)
-            deltadeltas.append(deltadelta.T)
-
-            counter += 1
-
-            if (counter % 500 == 0):
-                print(counter)
-
-        elif data_type == "scripted":
-            if detect_acting_type(utterance) == "scripted":
+        for utterance in data:
+            if data_type == "all":
                 x_head = utterance['signal']
                 st_features = calculate_features(x_head, framerate, None)
                 delta = stDelta(st_features, 2)
@@ -385,47 +368,124 @@ def get_speech_features(data, data_type="improvised", feature_type="mfcc"):
                 if (counter % 500 == 0):
                     print(counter)
 
-        elif data_type == "improvised":
-            if detect_acting_type(utterance) == "improvised":
+            elif data_type == "scripted":
+                if detect_acting_type(utterance) == "scripted":
+                    x_head = utterance['signal']
+                    st_features = calculate_features(x_head, framerate, None)
+                    delta = stDelta(st_features, 2)
+                    deltadelta = stDelta(delta, 2)
+                    st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
+                    delta, _ = pad_sequence_into_array(delta, maxlen=100)
+                    deltadelta, _ = pad_sequence_into_array(deltadelta, maxlen=100)
+                    features.append(st_features.T)
+                    deltas.append(delta.T)
+                    deltadeltas.append(deltadelta.T)
+
+                    counter += 1
+
+                    if (counter % 500 == 0):
+                        print(counter)
+
+            elif data_type == "improvised":
+                if detect_acting_type(utterance) == "improvised":
+                    x_head = utterance['signal']
+                    st_features = calculate_features(x_head, framerate, None)
+                    delta = stDelta(st_features, 2)
+                    deltadelta = stDelta(delta, 2)
+                    st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
+                    delta, _ = pad_sequence_into_array(delta, maxlen=100)
+                    deltadelta, _ = pad_sequence_into_array(deltadelta, maxlen=100)
+                    features.append(st_features.T)
+                    deltas.append(delta.T)
+                    deltadeltas.append(deltadelta.T)
+
+                    counter += 1
+
+                    if (counter % 500 == 0):
+                        print(counter)
+            else:
+                raise ValueError(data_type + "is beyond us...")
+
+        # feature normalization
+        features = np.array(features)
+        deltas = np.array(deltas)
+        deltadeltas = np.array(deltadeltas)
+
+        if feature_type == "mfcc":
+            features = features[:, :, feature_on:feature_off]
+            deltas = deltas[:, :, feature_on:feature_off]
+            deltadeltas = deltadeltas[:, :, feature_on:feature_off]
+
+        mean_features = np.mean(features[:train_size], axis=0)
+        std_features = np.std(features[:train_size], axis=0)
+        mean_deltas = np.mean(deltas[:train_size], axis=0)
+        std_deltas = np.std(deltas[:train_size], axis=0)
+        mean_deltadeltas = np.mean(deltadeltas[:train_size], axis=0)
+        std_deltadeltas = np.std(deltadeltas[:train_size], axis=0)
+
+        speech_features[:, :, :, 0] = (features[:, :, :] - mean_features) / (std_features + eps)
+        speech_features[:, :, :, 1] = (features[:, :, :] - mean_deltas) / (std_deltas + eps)
+        speech_features[:, :, :, 2] = (features[:, :, :] - mean_deltadeltas) / (std_deltadeltas + eps)
+        print("speech_features shape", speech_features.shape)
+
+    if mode == "static":
+        features = []
+        speech_features = np.zeros((train_size + test_size, 100, feature_size))
+
+        counter = 0
+
+        for utterance in data:
+            if data_type == "all":
                 x_head = utterance['signal']
                 st_features = calculate_features(x_head, framerate, None)
-                delta = stDelta(st_features, 2)
-                deltadelta = stDelta(delta, 2)
                 st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
-                delta, _ = pad_sequence_into_array(delta, maxlen=100)
-                deltadelta, _ = pad_sequence_into_array(deltadelta, maxlen=100)
                 features.append(st_features.T)
-                deltas.append(delta.T)
-                deltadeltas.append(deltadelta.T)
 
                 counter += 1
 
                 if (counter % 500 == 0):
                     print(counter)
-        else:
-            raise ValueError(data_type + "is beyond us...")
 
-    # feature normalization
-    features = np.array(features)
-    deltas = np.array(deltas)
-    deltadeltas = np.array(deltadeltas)
+            elif data_type == "scripted":
+                if detect_acting_type(utterance) == "scripted":
+                    x_head = utterance['signal']
+                    st_features = calculate_features(x_head, framerate, None)
+                    st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
+                    features.append(st_features.T)
 
-    if feature_type == "mfcc":
-        features = features[:, :, feature_on:feature_off]
-        deltas = deltas[:, :, feature_on:feature_off]
-        deltadeltas = deltadeltas[:, :, feature_on:feature_off]
+                    counter += 1
 
-    mean_features = np.mean(features[:train_size], axis=0)
-    std_features = np.std(features[:train_size], axis=0)
-    mean_deltas = np.mean(deltas[:train_size], axis=0)
-    std_deltas = np.std(deltas[:train_size], axis=0)
-    mean_deltadeltas = np.mean(deltadeltas[:train_size], axis=0)
-    std_deltadeltas = np.std(deltadeltas[:train_size], axis=0)
+                    if (counter % 500 == 0):
+                        print(counter)
 
-    speech_features[:, :, :, 0] = (features[:, :, :] - mean_features) / (std_features + eps)
-    speech_features[:, :, :, 1] = (features[:, :, :] - mean_deltas) / (std_deltas + eps)
-    speech_features[:, :, :, 2] = (features[:, :, :] - mean_deltadeltas) / (std_deltadeltas + eps)
-    print("speech_features shape", speech_features.shape)
+            elif data_type == "improvised":
+                if detect_acting_type(utterance) == "improvised":
+                    x_head = utterance['signal']
+                    st_features = calculate_features(x_head, framerate, None)
+                    st_features, _ = pad_sequence_into_array(st_features, maxlen=100)
+                    features.append(st_features.T)
+
+                    counter += 1
+
+                    if (counter % 500 == 0):
+                        print(counter)
+            else:
+                raise ValueError(data_type + "is beyond us...")
+
+        # feature normalization
+        features = np.array(features)
+
+        if feature_type == "mfcc":
+            features = features[:, :, feature_on:feature_off]
+
+        mean_features = np.mean(features[:train_size], axis=0)
+        std_features = np.std(features[:train_size], axis=0)
+
+        speech_features[:, :, :] = (features[:, :, :] - mean_features) / (std_features + eps)
+        print("speech_features shape", speech_features.shape)
+
+    else:
+        raise NotImplementedError("we only do static or dynamic bro!")
 
     return speech_features
 
@@ -518,7 +578,7 @@ def feed_data(config):
     code_path = os.path.dirname(os.path.realpath(os.getcwd()))
     data_type = config['data_type']
     feature_type = config['feature_type']
-
+    mode = config['mode']
 
     with open(code_path + '/HearYou2.0/datasets/data_collected.pickle', 'rb') as handle:
         data = pickle.load(handle)
@@ -534,7 +594,7 @@ def feed_data(config):
 
     if model_name == 'text_speech_mocap' or model_name == 'text_speech_mocap_delta':
         nb_words, g_word_embedding_matrix, x_text = get_transcription(data, data_type=data_type)
-        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type)
+        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type, mode=mode)
         x_mocap = get_mocap(data, data_type=data_type)
         Y = get_label(data, emotions_used, data_type=data_type)
 
@@ -555,7 +615,7 @@ def feed_data(config):
 
     if model_name == 'text_speech' or model_name == 'text_speech_delta':
         nb_words, g_word_embedding_matrix, x_text = get_transcription(data, data_type=data_type)
-        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type)
+        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type, mode=mode)
         Y = get_label(data, emotions_used, data_type=data_type)
 
         # train test split
@@ -587,7 +647,7 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix
 
     if model_name == 'speech_dense' or model_name == 'speech_lstm' or model_name == 'speech_lstm_attention' or model_name == 'speech_delta':
-        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type)
+        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type, mode=mode)
         Y = get_label(data, emotions_used, data_type=data_type)
 
         # train test split
@@ -602,7 +662,7 @@ def feed_data(config):
         return xtrain, ytrain, xtest, ytest
 
     if model_name == 'speech_mocap_delta':
-        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type)
+        x_speech = get_speech_features(data, data_type=data_type, feature_type=feature_type, mode=mode)
         x_mocap = get_mocap(data, data_type=data_type)
         Y = get_label(data, emotions_used, data_type=data_type)
 
@@ -656,6 +716,7 @@ def feed_data(config):
 def load_model(config):
 
     model_name = config['model'].split('.')[-1]
+
     path_to_plots = './plots/' + model_name
     if not os.path.exists(path_to_plots):
         os.makedirs(path_to_plots)

@@ -4,7 +4,7 @@ from keras.models import Model
 from metrics.top_k_accuracy import *
 from wrappers.attention import AttentionDecoder
 
-def load(nb_words, g_word_embedding_matrix):
+def load(nb_words, g_word_embedding_matrix, feat_size):
 
     input_layer = Input(shape=(500, ))
     layer = input_layer

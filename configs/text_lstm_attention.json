@@ -5,5 +5,6 @@
   "model": "models.text_lstm_attention",
   "emotion": ["ang", "exc", "neu", "sad"],
   "data_type": "improvised",
-  "feature_type": "mfcc"
+  "feature_type": "mfcc",
+  "mode": "static"
 }

@@ -3,10 +3,10 @@ from keras.layers import BatchNormalization, Dense, Embedding, LSTM, Bidirection
 from keras.models import Model
 from metrics.top_k_accuracy import *
 
-def load():
+def load(feat_size):
 
 
-    speech_input_layer = Input(shape=(100, 34))
+    speech_input_layer = Input(shape=(100, feat_size))
     speech_layer = speech_input_layer
 
     speech_layer = Bidirectional(LSTM(256, return_sequences=True))(speech_layer)

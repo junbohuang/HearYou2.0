@@ -3,7 +3,7 @@ from keras.layers import BatchNormalization, Dense, Embedding, LSTM, Bidirection
 from keras.models import Model
 from metrics.top_k_accuracy import *
 
-def load(nb_words, g_word_embedding_matrix):
+def load(nb_words, g_word_embedding_matrix, feat_size):
 
     input_layer = Input(shape=(500, ))
     layer = input_layer

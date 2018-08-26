@@ -4,10 +4,10 @@ from keras.models import Model
 from metrics.top_k_accuracy import *
 from wrappers.attention import AttentionDecoder
 
-def load():
+def load(feat_size):
 
 
-    input_layer = Input(shape=(100, 34))
+    input_layer = Input(shape=(100, feat_size))
     layer = input_layer
 
     layer = Bidirectional(LSTM(256, return_sequences=True, recurrent_dropout=0.2))(layer)
