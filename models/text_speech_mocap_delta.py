@@ -17,11 +17,11 @@ def load(nb_words, g_word_embedding_matrix, feat_size):
                            weights=[g_word_embedding_matrix],
                            input_length=500,
                            trainable=True)(text_layer)
-    text_layer = Bidirectional(LSTM(128, return_sequences=True, recurrent_dropout=0.2))(text_layer)
+    text_layer = Bidirectional(LSTM(256, return_sequences=True, recurrent_dropout=0.2))(text_layer)
     text_layer = Dropout(0.2)(text_layer)
-    text_layer = LSTM(128, return_sequences=True, recurrent_dropout=0.2)(text_layer)
+    text_layer = LSTM(256, return_sequences=True, recurrent_dropout=0.2)(text_layer)
     text_layer = Dropout(0.2)(text_layer)
-    text_layer = AttentionDecoder(128, 128, name='AttentionDecoder_tx')(text_layer)
+    text_layer = AttentionDecoder(256, 256, name='AttentionDecoder_tx')(text_layer)
     text_layer = Flatten()(text_layer)
     text_layer = Dense(256, activation='relu')(text_layer)
 
