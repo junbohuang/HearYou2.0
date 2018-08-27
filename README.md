@@ -25,7 +25,7 @@ run all configurations stored in *./configs* if *-c flag* is not given
 
 ## Results
 ### static speech feature
-|data type(all feat)||Scripted||Improvised ||Both|
+|data type(all feat)|\2. Scripted||Improvised ||Both|
 |:-----------------:|:----:|:----:|:----:|:----:|:----:|:----:|
 |                   | MFCC|all| MFCC|all | MFCC|all |
 | text              |xx%|xx%|56%|xx%|61%|xx%|
