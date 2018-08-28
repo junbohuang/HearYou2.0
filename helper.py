@@ -324,7 +324,7 @@ def get_speech_features(data, data_type="improvised", feature_type="mfcc", mode=
     eps = 1e-5
     print("creating features for speech...")
     print(data_type)
-
+    print("mode", mode)
     utterance_count_dict = count_utterance(data)
     train_size, test_size = get_count(utterance_count_dict, data_type)
 
@@ -484,8 +484,8 @@ def get_speech_features(data, data_type="improvised", feature_type="mfcc", mode=
         speech_features[:, :, :] = (features[:, :, :] - mean_features) / (std_features + eps)
         print("speech_features shape", speech_features.shape)
 
-    else:
-        raise NotImplementedError("we only do static or dynamic bro!")
+    #else:
+      #  raise NotImplementedError("we only do static or dynamic bro!")
 
     return speech_features
 
@@ -785,7 +785,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
     print("class_weights_dict", class_weights_dict)
     # tensorboard = TensorBoard(log_dir=path_to_log, histogram_freq=1, write_graph=False, write_grads=False)
     # cm_logger = ConfusionMatrixPlotter(xtrain, ytrain, emotion_class, model_name)
-    lr_sched = step_decay_schedule(initial_lr=1e-4, decay_factor=0.80, step_size=2)
+    lr_sched = step_decay_schedule(initial_lr=1e-4, decay_factor=0.75, step_size=4)
 
     ## FOR SAVING MODEL
     h5_name =  model_name + '_' + data_type + '_' + feature_type + '.h5'

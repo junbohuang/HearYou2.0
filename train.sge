@@ -1,5 +1,5 @@
 #!/bin/bash
-#$ -N tx_sp_mo_improvised_mfcc
+#$ -N final_all_mfcc_decay_nolrschedule
 #$ -l mem=32G
 #$ -cwd
 #$ -l cuda=1

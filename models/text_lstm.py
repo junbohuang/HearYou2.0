@@ -13,7 +13,7 @@ def load(nb_words, g_word_embedding_matrix, feat_size):
                                     weights=[g_word_embedding_matrix],
                                     input_length=500,
                                     trainable=True)(layer)
-    layer = Bidirectional(LSTM(256, return_sequences=True, recurrent_dropout=0.2))(layer)
+    layer = Bidirectional(LSTM(512, return_sequences=True, recurrent_dropout=0.2))(layer)
     layer = Dropout(0.2)(layer)
     layer = Bidirectional(LSTM(256, return_sequences=False, recurrent_dropout=0.2))(layer)
     layer = Dropout(0.2)(layer)
