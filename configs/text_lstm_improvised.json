@@ -4,7 +4,7 @@
   "train_val_split": [0.85, 0.15],
   "model": "models.text_lstm",
   "emotion": ["ang", "exc", "neu", "sad"],
-  "data_type": "all",
+  "data_type": "improvised",
   "feature_type": "all",
   "mode": "statics"
 }

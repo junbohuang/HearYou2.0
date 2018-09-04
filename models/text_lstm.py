@@ -17,12 +17,13 @@ def load(nb_words, g_word_embedding_matrix, feat_size):
     layer = Dropout(0.2)(layer)
     layer = Bidirectional(LSTM(256, return_sequences=False, recurrent_dropout=0.2))(layer)
     layer = Dropout(0.2)(layer)
-    # layer = Dense(256, activation='relu')(layer)
+    layer = Dense(256, activation='relu')(layer)
 
     output_layer = Dense(4, activation='softmax')(layer)
 
     model = Model(inputs=input_layer, outputs=output_layer)
     metrics = top_k_accuracy()
-    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=metrics)
+    adam = Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=None, decay=1e-6, amsgrad=False, clipnorm=3.0)
+    model.compile(loss='categorical_crossentropy', optimizer=adam, metrics=metrics)
     return model
 

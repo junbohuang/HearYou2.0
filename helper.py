@@ -790,7 +790,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
     ## FOR SAVING MODEL
     h5_name =  model_name + '_' + data_type + '_' + feature_type + '.h5'
     save_path = os.path.join(path_to_log, h5_name)
-    # check_pointer = ModelCheckpoint(save_path, save_best_only=True)
+    check_pointer = ModelCheckpoint(save_path, save_best_only=True)
 
 
     with tf.Session() as sess:
@@ -799,7 +799,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
         model.fit(xtrain, ytrain,
                     batch_size=batch_size, epochs=epochs, verbose=1,
                     validation_split=validation_split, shuffle=True,
-                    callbacks=[csv_logger, accloss_logger, lr_sched],
+                    callbacks=[csv_logger, accloss_logger, lr_sched, check_pointer],
                     class_weight=class_weights_dict)
         print("trained. saving model...")
         model.save_weights(save_path)
