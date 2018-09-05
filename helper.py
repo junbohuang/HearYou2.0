@@ -4,8 +4,7 @@ import importlib
 import pickle
 
 import tensorflow as tf
-from tensorflow.python.keras.callbacks import History, TensorBoard, ModelCheckpoint, CSVLogger, LearningRateScheduler
-from tensorflow.python import debug as tf_debug
+from tensorflow.python.keras.callbacks import ModelCheckpoint, CSVLogger, LearningRateScheduler, EarlyStopping
 
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing import sequence
@@ -789,9 +788,15 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
 
     ## FOR SAVING MODEL
     h5_name =  model_name + '_' + data_type + '_' + feature_type + '.h5'
-    save_path = os.path.join(path_to_log, h5_name)
-    check_pointer = ModelCheckpoint(save_path, save_best_only=True)
+    weights_save_path = os.path.join(path_to_log, h5_name)
 
+    js_name = model_name + '_' + data_type + '_' + feature_type + '.json'
+    archi_save_path = os.path.join(path_to_log, js_name)
+    with open(archi_save_path, 'w') as f:
+        f.write(model.to_json())
+
+    # check_pointer = ModelCheckpoint(save_path, save_best_only=True)
+    early_stopping = EarlyStopping(monitor='val_loss', patience=3)
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -799,10 +804,10 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
         model.fit(xtrain, ytrain,
                     batch_size=batch_size, epochs=epochs, verbose=1,
                     validation_split=validation_split, shuffle=True,
-                    callbacks=[csv_logger, accloss_logger, lr_sched, check_pointer],
+                    callbacks=[lr_sched, early_stopping],
                     class_weight=class_weights_dict)
         print("trained. saving model...")
-        model.save_weights(save_path)
+        model.save_weights(weights_save_path)
         print("Saved model to disk")
 
         print("evaluating...")

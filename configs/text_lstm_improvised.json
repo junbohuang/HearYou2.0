@@ -1,6 +1,6 @@
 {
-  "epochs": 30,
-  "batch_size": 64,
+  "epochs": 20,
+  "batch_size": 32,
   "train_val_split": [0.85, 0.15],
   "model": "models.text_lstm",
   "emotion": ["ang", "exc", "neu", "sad"],
