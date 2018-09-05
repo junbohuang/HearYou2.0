@@ -5,6 +5,6 @@
   "model": "models.speech_lstm",
   "emotion": ["ang", "exc", "neu", "sad"],
   "data_type": "improvised",
-  "feature_type": "mfcc",
+  "feature_type": "all",
   "mode": "static"
 }

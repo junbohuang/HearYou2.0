@@ -2,16 +2,39 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="167b6649-c8be-4b8d-a6ae-95b39f9de463" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plots/text_lstm/Accuracy.png" afterPath="$PROJECT_DIR$/plots/text_lstm/Accuracy.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plots/text_lstm/Loss.png" afterPath="$PROJECT_DIR$/plots/text_lstm/Loss.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plots/text_lstm/Normalized_cm_text_lstm_all_all.png" afterPath="$PROJECT_DIR$/plots/text_lstm/Normalized_cm_text_lstm_all_all.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plots/text_lstm/cm_text_lstm_all_all.png" afterPath="$PROJECT_DIR$/plots/text_lstm/cm_text_lstm_all_all.png" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/mocap_conv.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/mocap_lstm.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/mocap_lstm_attention.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/speech_delta.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/speech_dense.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/speech_lstm_attention.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/speech_mocap.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/speech_mocap_delta.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/text_lstm.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/text_lstm_attention.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/text_lstm_improvised.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/text_speech.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/configs/text_speech_delta.json" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/mocap_conv/mocap_conv.log" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/mocap_lstm/mocap_lstm.h5" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/mocap_lstm/mocap_lstm.log" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/mocap_lstm_attention/mocap_lstm_attention.log" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/speech_dense/speech_dense.h5" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/speech_dense/speech_dense.log" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/speech_mocap/speech_mocap.h5" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/speech_mocap/speech_mocap.log" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/speech_mocap_attention/speech_mocap_attention.log" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/text_lstm_attention/text_lstm_attention.log" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/text_lstm_attention/text_lstm_attention_all_mfcc.log" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/text_lstm_attention/text_lstm_attention_improvised_mfcc.log" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/logs/text_speech_mocap_attention/text_speech_mocap_attention.log" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/architectures.pages" afterPath="$PROJECT_DIR$/architectures.pages" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plots/text_lstm/Normalized_cm_text_lstm_improvised_all.png" afterPath="$PROJECT_DIR$/plots/text_lstm/Normalized_cm_text_lstm_improvised_all.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plots/text_lstm/cm_text_lstm_improvised_all.png" afterPath="$PROJECT_DIR$/plots/text_lstm/cm_text_lstm_improvised_all.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/configs/text_lstm.json" afterPath="$PROJECT_DIR$/configs/text_lstm.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/configs/text_lstm_improvised.json" afterPath="$PROJECT_DIR$/configs/text_lstm_improvised.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/configs/speech_lstm.json" afterPath="$PROJECT_DIR$/configs/speech_lstm.json" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/helper.py" afterPath="$PROJECT_DIR$/helper.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/logs/text_lstm/text_lstm_all_all.log" afterPath="$PROJECT_DIR$/logs/text_lstm/text_lstm_all_all.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/text_lstm.py" afterPath="$PROJECT_DIR$/models/text_lstm.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models/text_speech_mocap_delta.py" afterPath="$PROJECT_DIR$/models/text_speech_mocap_delta.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -26,18 +49,18 @@
       <file leaf-file-name="speech_delta.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/speech_delta.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="10" column="18" lean-forward="false" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="18" />
+            <state relative-caret-position="510">
+              <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="text_lstm.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="text_lstm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/models/text_lstm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+            <state relative-caret-position="225">
+              <caret line="19" column="31" lean-forward="false" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -59,7 +82,7 @@
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="360">
-              <caret line="24" column="27" lean-forward="true" selection-start-line="24" selection-start-column="27" selection-end-line="24" selection-end-column="27" />
+              <caret line="24" column="27" lean-forward="false" selection-start-line="24" selection-start-column="27" selection-end-line="24" selection-end-column="27" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -67,11 +90,63 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="text_lstm.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/configs/text_lstm.json">
+      <file leaf-file-name="text_speech_mocap_delta.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/configs/text_speech_mocap_delta.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="120">
-              <caret line="8" column="18" lean-forward="false" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+              <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="text_speech_mocap_delta.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/models/text_speech_mocap_delta.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="322">
+              <caret line="28" column="27" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#87#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="speech_lstm.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/models/speech_lstm.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="15" column="27" lean-forward="false" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="speech_lstm.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/configs/speech_lstm.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="22" lean-forward="false" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="speech_impro.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/configs/speech_impro.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="speech_scripted.json" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/configs/speech_scripted.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -147,14 +222,11 @@
         <option value="$PROJECT_DIR$/models/speech_mocap_attention.py" />
         <option value="$PROJECT_DIR$/models/speech_mocap_delta.py" />
         <option value="$PROJECT_DIR$/models/text_speech_delta.py" />
-        <option value="$PROJECT_DIR$/models/text_speech_mocap_delta.py" />
         <option value="$PROJECT_DIR$/plotters/confusion_matrix.py" />
         <option value="$PROJECT_DIR$/models/speech_delta.py" />
-        <option value="$PROJECT_DIR$/configs/mocap_conv.json" />
         <option value="$PROJECT_DIR$/configs/mocap_lstm.json" />
         <option value="$PROJECT_DIR$/configs/mocap_lstm_attention.json" />
         <option value="$PROJECT_DIR$/configs/speech_dense.json" />
-        <option value="$PROJECT_DIR$/configs/speech_lstm.json" />
         <option value="$PROJECT_DIR$/configs/speech_lstm_attention.json" />
         <option value="$PROJECT_DIR$/configs/speech_mocap.json" />
         <option value="$PROJECT_DIR$/configs/text_lstm.json" />
@@ -177,6 +249,9 @@
         <option value="$PROJECT_DIR$/configs/speech_delta.json" />
         <option value="$PROJECT_DIR$/configs/text_speech_mocap_delta.json" />
         <option value="$PROJECT_DIR$/helper.py" />
+        <option value="$PROJECT_DIR$/configs/mocap_conv.json" />
+        <option value="$PROJECT_DIR$/models/text_speech_mocap_delta.py" />
+        <option value="$PROJECT_DIR$/configs/speech_lstm.json" />
       </list>
     </option>
   </component>
@@ -486,20 +561,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/outputs/scripted/mfccdd/sp_mo_scripted_mfcc.o442881">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-24230">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/outputs/scripted/mfccdd/sp_scripted_mfcc.o442884">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-23705">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/outputs/scripted/mfccdd/sp_scripted_mfcc.o442886">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-23705">
@@ -689,13 +750,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/speech_lstm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="45" lean-forward="false" selection-start-line="8" selection-start-column="45" selection-end-line="8" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/speech_dense.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -738,13 +792,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/configs/speech_lstm.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="18" lean-forward="false" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/configs/speech_dense.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -773,30 +820,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/configs/mocap_conv.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="23" lean-forward="false" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/configs/text_speech_mocap_delta.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/text_speech_mocap_delta.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="599">
-          <caret line="63" column="18" lean-forward="false" selection-start-line="63" selection-start-column="18" selection-end-line="63" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/models/text_speech_delta.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
@@ -815,14 +838,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models/speech_delta.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="10" column="18" lean-forward="false" selection-start-line="10" selection-start-column="9" selection-end-line="10" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/helper.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="652">
@@ -836,7 +851,7 @@
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="24" column="27" lean-forward="true" selection-start-line="24" selection-start-column="27" selection-end-line="24" selection-end-column="27" />
+          <caret line="24" column="27" lean-forward="false" selection-start-line="24" selection-start-column="27" selection-end-line="24" selection-end-column="27" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
@@ -853,9 +868,75 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/models/text_lstm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        <state relative-caret-position="225">
+          <caret line="19" column="31" lean-forward="false" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configs/mocap_conv.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/speech_delta.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="510">
+          <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configs/text_speech_mocap_delta.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="19" lean-forward="false" selection-start-line="8" selection-start-column="19" selection-end-line="8" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/speech_lstm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="15" column="27" lean-forward="false" selection-start-line="15" selection-start-column="27" selection-end-line="15" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configs/speech_lstm.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="22" lean-forward="false" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configs/speech_impro.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/configs/speech_scripted.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/text_speech_mocap_delta.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="28" column="27" lean-forward="false" selection-start-line="28" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#87#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
