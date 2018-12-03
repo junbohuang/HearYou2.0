@@ -3,7 +3,7 @@ from keras.layers import BatchNormalization, Dense, Embedding, LSTM, Bidirection
 from keras.models import Model
 from metrics.top_k_accuracy import *
 
-def load(nb_words, g_word_embedding_matrix):
+def load(nb_words, g_word_embedding_matrix, feat_size):
 
     text_input_layer = Input(shape=(500, ))
     text_layer = text_input_layer
@@ -18,7 +18,7 @@ def load(nb_words, g_word_embedding_matrix):
     text_layer = Dropout(0.2)(text_layer)
     text_layer = Dense(256, activation='relu')(text_layer)
 
-    speech_input_layer = Input(shape=(100, 34))
+    speech_input_layer = Input(shape=(100, feat_size))
     speech_layer = speech_input_layer
 
     speech_layer = Bidirectional(LSTM(256, return_sequences=True, recurrent_dropout=0.2))(speech_layer)

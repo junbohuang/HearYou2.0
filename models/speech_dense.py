@@ -3,12 +3,11 @@ from keras.models import Model
 from metrics.top_k_accuracy import *
 
 
-def load():
+def load(feat_size):
 
-    input_layer = Input(shape=(100, 34))
+    input_layer = Input(shape=(100, feat_size))
     layer = input_layer
 
-    layer = Flatten(input_shape=(100, 34))(layer)
     layer = Dense(1024, activation='relu')(layer)
     layer = BatchNormalization()(layer)
     layer = Dropout(0.2)(layer)

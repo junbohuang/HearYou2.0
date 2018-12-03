@@ -1,5 +1,5 @@
 #!/bin/bash
-#$ -N att_tx
+#$ -N text_imprro_all_pretrain
 #$ -l mem=32G
 #$ -cwd
 #$ -l cuda=1
@@ -41,7 +41,7 @@ source activate pimv
 
 
 echo "rolling..."
-PYTHONPATH=$PIMV_ROOT/$USER WALLTIME=12:00:00 python main.py -c configs/text_lstm_attention.json
+PYTHONPATH=$PIMV_ROOT/$USER WALLTIME=12:00:00 python main.py -c configs/text_lstm_improvised.json
 
 
 echo ""

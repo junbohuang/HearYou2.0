@@ -5,7 +5,7 @@ from metrics.top_k_accuracy import *
 ## BLOODY EXPERIENCE!
 ## DO NOT ADD DENSE LAYER AFTER FLATTENING!!!!!
 
-def load():
+def load(feat_size):
 
 
     input_layer = Input(shape=(200, 189, 1))

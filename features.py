@@ -495,6 +495,24 @@ def stSpectogram(signal, Fs, Win, Step, PLOT=False):
 
     return (specgram, TimeAxis, FreqAxis)
 
+def stDelta(feat, N):
+    # from python_speech_features library
+    """Compute delta features from a feature vector sequence.
+    :param feat: A numpy array of size (NUMFRAMES by number of features) containing features. Each row holds 1 feature vector.
+    :param N: For each frame, calculate delta features based on preceding and following N frames
+    :returns: A numpy array of size (NUMFRAMES by number of features) containing delta features. Each row holds 1 delta feature vector.
+    """
+    if N < 1:
+        raise ValueError('N must be an integer >= 1')
+    NUMFRAMES = len(feat)
+    denominator = 2 * sum([i ** 2 for i in range(1, N + 1)])
+    delta_feat = numpy.empty_like(feat)
+    padded = numpy.pad(feat, ((N, N), (0, 0)), mode='edge')  # padded version of feat
+    for t in range(NUMFRAMES):
+        delta_feat[t] = numpy.dot(numpy.arange(-N, N + 1),
+                                  padded[t: t + 2 * N + 1]) / denominator  # [t : t+2*N+1] == [(N+t)-N : (N+t)+N+1]
+    return delta_feat
+
 
 """ Windowing and feature extraction """
 
@@ -521,7 +539,7 @@ def stFeatureExtraction(signal, Fs, Win, Step):
     signal = signal / (2.0 ** 15)
     DC = signal.mean()
     MAX = (numpy.abs(signal)).max()
-    signal = (signal - DC) / MAX
+    signal = (signal - DC) / (MAX + 0.0000000001)             ##TODO: DELETED NUMBER?
 
     N = len(signal)                                # total number of samples
     curPos = 0
@@ -532,12 +550,14 @@ def stFeatureExtraction(signal, Fs, Win, Step):
     nChroma, nFreqsPerChroma = stChromaFeaturesInit(nFFT, Fs)
 
 
-    numOfPitches = 5
-    numOfPeaks = 10
+    numOfPitches = 5            ##TODO
+    numOfPeaks = 10             ##TODO
     numOfTimeSpectralFeatures = 8
     numOfHarmonicFeatures = 0
     nceps = 13
     numOfChromaFeatures = 13
+    numOfDeltas = 13
+    numOfDeltasDeltas = 13
 
     totalNumOfFeatures = numOfTimeSpectralFeatures + nceps + numOfHarmonicFeatures + numOfChromaFeatures
 #    totalNumOfFeatures = numOfTimeSpectralFeatures + nceps + numOfHarmonicFeatures
@@ -567,7 +587,11 @@ def stFeatureExtraction(signal, Fs, Win, Step):
         numOfCFFeatures = numOfTimeSpectralFeatures + nceps + numOfChromaFeatures
 
         curFV[numOfCFFeatures-1] = chromaF.std()
-        
+        ##TODO: implement deltas and deltas-deltas
+
+
+
+
         if countFrames == 1:
             stFeatures = curFV                                        # initialize feature matrix (if first frame)
         else:

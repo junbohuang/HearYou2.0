@@ -4,7 +4,7 @@ from keras.models import Model
 from metrics.top_k_accuracy import *
 from wrappers.attention import AttentionDecoder
 
-def load():
+def load(feat_size):
 
     input_layer = Input(shape=(200, 189))
     layer = input_layer

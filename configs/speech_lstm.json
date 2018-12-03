@@ -1,8 +1,10 @@
 {
   "epochs": 20,
   "batch_size": 64,
-  "train_val_test_split": [0.7, 0.15, 0.15],
-  "split_seed": 42,
+  "train_val_split": [0.85, 0.15],
   "model": "models.speech_lstm",
-  "emotion": ["ang", "exc", "neu", "sad"]
+  "emotion": ["ang", "exc", "neu", "sad"],
+  "data_type": "improvised",
+  "feature_type": "all",
+  "mode": "static"
 }

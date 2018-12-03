@@ -24,17 +24,9 @@ python HearYou2.0.py -c configs/<model_to_run>.json
 run all configurations stored in *./configs* if *-c flag* is not given
 
 ## Results
-|             |          Grouping           ||
-First Header  | Second Header | Third Header |
- ------------ | :-----------: | -----------: |
-Content       |          *Long Cell*        ||
-Content       |   **Cell**    |         Cell |
 
-New section   |     More      |         Data |
-And more      | With an escaped '\|'         ||  
-[Prototype table]
 ### static speech feature
-|data type(all feat)|\2. Scripted||Improvised ||Both|
+|data type(all feat)|Scripted||Improvised||Both||
 |:-----------------:|:----:|:----:|:----:|:----:|:----:|:----:|
 |                   | MFCC|all| MFCC|all | MFCC|all |
 | text              |xx%|xx%|56%|xx%|61%|xx%|
@@ -86,4 +78,3 @@ Conceptor
 
 Multimodality
 - https://github.com/Samarth-Tripathi/IEMOCAP-Emotion-Detection
-

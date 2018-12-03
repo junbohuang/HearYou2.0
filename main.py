@@ -33,7 +33,6 @@ def main():
                 model, xtrain, ytrain, xtest, ytest = load_model(config)
                 model.summary()
                 train(config, model, xtrain, ytrain, xtest, ytest)
-                # evaluate(config, model, xtest, ytest)
                 K.clear_session()
 
 
@@ -43,6 +42,7 @@ def parse_command_line_args():
                         help='The json path containing the target experiment configuration.')
     args = parser.parse_args()
     return args
+
 
 if __name__ == '__main__':
     main()
