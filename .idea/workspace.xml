@@ -768,6 +768,10 @@
           <caret line="798" column="65" lean-forward="false" selection-start-line="798" selection-start-column="65" selection-end-line="798" selection-end-column="65" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
+            <marker date="1535027808590" expanded="true" signature="152:1005" ph="..." />
+            <marker date="1535027808590" expanded="true" signature="518:1005" ph="..." />
+            <marker date="1535027808590" expanded="true" signature="586:1005" ph="..." />
+            <marker date="1535027808590" expanded="true" signature="655:1005" ph="..." />
           </folding>
         </state>
       </provider>
@@ -803,6 +807,7 @@
         <state relative-caret-position="105">
           <caret line="7" column="22" lean-forward="false" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
           <folding />
+
         </state>
       </provider>
     </entry>
@@ -811,6 +816,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+
         </state>
       </provider>
     </entry>
@@ -819,6 +825,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
+
         </state>
       </provider>
     </entry>
@@ -829,6 +836,7 @@
           <folding>
             <element signature="e#0#87#0" expanded="true" />
           </folding>
+
         </state>
       </provider>
     </entry>
