@@ -25,23 +25,42 @@ run all configurations stored in *./configs* if *-c flag* is not given
 
 ## Results
 
-| data type         | Scripted| Improvised | Both |
-|:-----------------:|:-------:|:----------:|:----:|
-| text              | xx%     |    xx%     |  xx% |
-| speech            | xx%     |    xx%     |  51% |
-| mocap             | xx%     |    xx%     |  xx% |
-| text+speech       | xx%     |    xx%     |  xx% |
-| speech+mocap      | xx%     |    xx%     |  54.12% |
-| text+speech+mocap | xx%     |    xx%     |  xx% |
+### static speech feature
+|data type(all feat)|Scripted||Improvised||Both||
+|:-----------------:|:----:|:----:|:----:|:----:|:----:|:----:|
+|                   | MFCC|all| MFCC|all | MFCC|all |
+| text              |xx%|xx%|56%|xx%|61%|xx%|
+| speech            |xx%|xx%|34%|xx%|51%|xx%|
+| mocap             |xx%|xx%|xx%|xx%|45%|xx%|
+| text+speech       |xx%|xx%|xx%|xx%|67%|xx%|
+| text+speech+mocap |xx%|xx%|xx%|xx%|70%|xx%|
 
-| feature type      | 34      | MFCC&DD    | 34&DD|
-|:-----------------:|:-------:|:----------:|:----:|
-| text              | xx%     |    xx%     |  xx% |
-| speech            | xx%     |    xx%     |  xx% |
-| mocap             | xx%     |    xx%     |  xx% |
-| text+speech       | xx%     |    xx%     |  xx% |
-| text+speech+mocap | xx%     |    xx%     |  xx% |
+### dynamic speech feature (with 1st/2nd derivative)
 
+### improvised data
+|feature type       | MFCC       | 34   |
+|:-----------------:|:----------:|:----:|
+| speech            |    57%     |  51% |
+| speech+mocap      |    73%     |  74% |
+| text+speech       |    65%     |  50% |
+| text+speech+mocap |    76%     |  69% |
+
+### scripted data
+|feature type       | MFCC       | 34   |
+|:-----------------:|:----------:|:----:|
+| speech            |    53%     |  51% |
+| speech+mocap      |    41%     |  47% |
+| text+speech       |    54%     |  51% |
+| text+speech+mocap |    44%     |  38% |
+
+### complete data
+|feature type       | MFCC       | 34   |
+|:-----------------:|:----------:|:----:|
+| speech            |    50%     |  50% |
+| speech+mocap      |    61%     |  52% |
+| text+speech       |    50%     |  52% |
+| text+speech+mocap |    60%     |  50% |
+* (text lstm without attention)
 
 ## References
 
