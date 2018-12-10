@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 plt.switch_backend('agg')
 
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import cohen_kappa_score, classification_report, matthews_corrcoef
 
 
 def plot_confusion_matrix(cm, classes,
@@ -47,6 +48,12 @@ def plot_cm(model_name, emotions_used, Y, prediction, data_type, feature_type):
     cnf_matrix = confusion_matrix(y_true, y_pred, labels=[0, 1, 2, 3])
     np.set_printoptions(precision=2)
     print(cnf_matrix)
+    print("Multi-class precision, recall and F1 score:")
+    print(classification_report(y_pred, y_true, target_names = emotions_used))
+    print("Multi-class cohens kappa (-1 to 1, where 0 means all effect is random effect):")
+    print(cohen_kappa_score(y_pred, y_true))
+    print("Multi-class MCC (-1 to 1, where 0 means all effect is random effect):")
+    print(matthews_corrcoef(y_pred, y_true))
 
     # Plot non-normalized confusion matrix
     path_to_cm = './plots/' + model_name
