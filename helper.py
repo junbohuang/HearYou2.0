@@ -19,6 +19,17 @@ from callbacks.ConfusionMatrixLogger import ConfusionMatrixPlotter
 from callbacks.AccuracyLossLogger import AccLossPlotter
 
 
+
+def get_path(*_args):
+    if len(_args) == 2:
+        path = os.path.join(_args[0], _args[1])
+    elif len(_args) == 1:
+        path = os.path.join(os.getcwd(), _args[0])
+    else:
+        raise Exception("Unexpected Argument")
+
+    return path
+    
 def detect_gender(utterance):
     if utterance['id'][-4] == "M":
         gender = "male"
@@ -775,13 +786,28 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
 
     accloss_logger = AccLossPlotter(model_name)
 
-    class_weights = class_weight.compute_class_weight('balanced',
+    class_weights_train = class_weight.compute_class_weight('balanced',
                                                       np.unique(ytrain.argmax(1)),
                                                       ytrain.argmax(1))
-    class_weights_dict = {}
-    for n in range(len(class_weights)):
-        class_weights_dict[n] = class_weights[n]
-    print("class_weights_dict", class_weights_dict)
+    class_weights_test = class_weight.compute_class_weight('balanced',
+                                                      np.unique(ytest.argmax(1)),
+                                                      ytest.argmax(1))
+    class_weights_train_dict = {}
+    for n in range(len(class_weights_train)):
+        class_weights_train_dict[n] = class_weights_train[n]
+    print("class_weights_train_dict", class_weights_train_dict)
+    print("class counts for training data:")
+    print(np.bincount(ytrain.argmax(1))[np.unique(ytrain.argmax(1))])
+
+    class_weights_test_dict = {}
+    for n in range(len(class_weights_test)):
+        class_weights_test_dict[n] = class_weights_test[n]
+    print("class_weights_test_dict", class_weights_test_dict)
+    print("class counts for testing data:")
+    print(np.bincount(ytest.argmax(1))[np.unique(ytest.argmax(1))])
+
+
+
     # tensorboard = TensorBoard(log_dir=path_to_log, histogram_freq=1, write_graph=False, write_grads=False)
     # cm_logger = ConfusionMatrixPlotter(xtrain, ytrain, emotion_class, model_name)
     lr_sched = step_decay_schedule(initial_lr=1e-4, decay_factor=0.75, step_size=4)
@@ -804,8 +830,8 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
         model.fit(xtrain, ytrain,
                     batch_size=batch_size, epochs=epochs, verbose=1,
                     validation_split=validation_split, shuffle=True,
-                    callbacks=[lr_sched, early_stopping],
-                    class_weight=class_weights_dict)
+                    callbacks=[lr_sched, early_stopping, accloss_logger],
+                    class_weight=class_weights_train_dict)
         print("trained. saving model...")
         model.save_weights(weights_save_path)
         print("Saved model to disk")

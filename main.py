@@ -11,15 +11,32 @@ def main():
     args = parse_command_line_args()
 
     if args.configpath:
-        with open(args.configpath) as json_data_file:
-            config = json.load(json_data_file)
+        if os.path.isfile(args.configpath):
+            with open(args.configpath) as json_data_file:
+                config = json.load(json_data_file)
 
-        model, xtrain, ytrain, xtest, ytest = load_model(config)
+            model, xtrain, ytrain, xtest, ytest = load_model(config)
 
-        model.summary()
-        train(config, model, xtrain, ytrain, xtest, ytest)
-        K.clear_session()
+            model.summary()
+            train(config, model, xtrain, ytrain, xtest, ytest)
+            K.clear_session()
 
+        elif os.path.isdir(args.configpath):
+            configs = os.listdir(args.configpath)
+            for cfg in configs:
+                if cfg[0] == '.':
+                    pass
+                else:
+                    configpath = get_path(args.configpath, cfg)
+                    with open(configpath) as json_data_file:
+                        config = json.load(json_data_file)
+
+                    model, xtrain, ytrain, xtest, ytest = load_model(config)
+                    model.summary()
+                    train(config, model, xtrain, ytrain, xtest, ytest)
+                    K.clear_session()
+        else: 
+            raise NotImplementedError("Wrong configuration path bro!")
     else:
         configs = os.listdir("configs")
         for cfg in configs:
