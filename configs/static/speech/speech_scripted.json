@@ -1,10 +1,10 @@
 {
-  "epochs": 20,
+  "epochs": 30,
   "batch_size": 64,
   "train_val_split": [0.85, 0.15],
-  "model": "models.mocap_conv",
+  "model": "models.speech_lstm_attention",
   "emotion": ["ang", "exc", "neu", "sad"],
-  "data_type": "all",
+  "data_type": "scripted",
   "feature_type": "all",
   "mode": "static"
 }
