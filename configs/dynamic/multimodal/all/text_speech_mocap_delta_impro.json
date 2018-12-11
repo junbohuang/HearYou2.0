@@ -2,9 +2,9 @@
   "epochs": 30,
   "batch_size": 32,
   "train_val_split": [0.85, 0.15],
-  "model": "models.speech_delta",
+  "model": "models.text_speech_mocap_delta",
   "emotion": ["ang", "exc", "neu", "sad"],
-  "data_type": "all",
+  "data_type": "improvised",
   "feature_type": "all",
   "mode": "dynamic"
 }

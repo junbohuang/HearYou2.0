@@ -23,7 +23,9 @@ def main():
 
         elif os.path.isdir(args.configpath):
             configs = os.listdir(args.configpath)
+            print("configs:", configs)
             for cfg in configs:
+                print("cfg:",cfg)
                 if cfg[0] == '.':
                     pass
                 else:
