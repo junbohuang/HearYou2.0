@@ -1,0 +1,52 @@
+*** Start of SGE job ***
+Tue Dec 11 22:03:28 CET 2018
+
+Hostname
+vector.cv.uni-osnabrueck.de
+445711
+Job-ID:
+445711
+user:
+juhuang
+
+Start
+
+CUDA VERSION (should be 9):
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2017 NVIDIA Corporation
+Built on Fri_Sep__1_21:08:03_CDT_2017
+Cuda compilation tools, release 9.0, V9.0.176
+ROOT
+/net/projects/scratch/summer/valid_until_31_January_2019/pimv/pimv_old
+rolling...
+/net/projects/scratch/summer/valid_until_31_January_2019/pimv/pimv_old/miniconda/envs/pimv/lib/python3.6/importlib/_bootstrap.py:219: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/net/projects/scratch/summer/valid_until_31_January_2019/pimv/pimv_old/miniconda/envs/pimv/lib/python3.6/importlib/_bootstrap.py:219: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+/net/projects/scratch/summer/valid_until_31_January_2019/pimv/pimv_old/miniconda/envs/pimv/lib/python3.6/importlib/_bootstrap.py:219: RuntimeWarning: numpy.dtype size changed, may indicate binary incompatibility. Expected 96, got 88
+  return f(*args, **kwds)
+Using TensorFlow backend.
+model: models.text_speech_mocap_delta
+Traceback (most recent call last):
+  File "main.py", line 67, in <module>
+    main()
+  File "main.py", line 18, in main
+    model, xtrain, ytrain, xtest, ytest = load_model(config)
+  File "/net/projects/scratch/summer/valid_until_31_January_2019/juhuang/nlp/HearYou2.0/helper.py", line 746, in load_model
+    xtrain, ytrain, xtest, ytest, nb_words, g_word_embedding_matrix = feed_data(config)
+  File "/net/projects/scratch/summer/valid_until_31_January_2019/juhuang/nlp/HearYou2.0/helper.py", line 597, in feed_data
+    train_size, test_size = get_count(utterance_count_dict, data_type)
+  File "/net/projects/scratch/summer/valid_until_31_January_2019/juhuang/nlp/HearYou2.0/helper.py", line 97, in get_count
+    raise NotImplementedError(data_type + " is beyond the data type...")
+NotImplementedError: impro is beyond the data type...
+
+Tue Dec 11 22:03:34 CET 2018
+*** End of SGE job ***
+
+Lavish subscription of memory-resources:
+
+	32768 Mbytes requested,
+	but peak usage was only 2294.9 Mbytes.
+
+------------> Please request grid resources more carefully! <------------
+

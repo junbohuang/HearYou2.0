@@ -822,7 +822,7 @@ def train(config, model, xtrain, ytrain, xtest, ytest):
         f.write(model.to_json())
 
     # check_pointer = ModelCheckpoint(save_path, save_best_only=True)
-    early_stopping = EarlyStopping(monitor='val_loss', patience=10)
+    early_stopping = EarlyStopping(monitor='val_loss', patience=30)
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())

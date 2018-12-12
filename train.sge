@@ -1,9 +1,9 @@
 #!/bin/bash
-#$ -N dynamic_mfcc_impro
-#$ -l mem=32G
+#$ -N mfcc_impro
+#$ -l mem=8G
 #$ -cwd
 #$ -l cuda=1
-#$ -l nv_mem_free=10G
+#$ -l nv_mem_free=2G
 #$ -j y
 #$ -pe default 6
 #$ -l h_rt=12:00:00
@@ -41,7 +41,7 @@ source activate pimv
 
 
 echo "rolling..."
-PYTHONPATH=$PIMV_ROOT/$USER WALLTIME=12:00:00 python main.py -c configs/dynamic/impro/mfcc/
+PYTHONPATH=$PIMV_ROOT/$USER WALLTIME=12:00:00 python main.py -c configs/finalmodel/mfcc_impro.json
 
 
 echo ""
